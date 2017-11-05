@@ -36,7 +36,7 @@ def create_db():
         now = datetime.datetime.now()
         school = Schools(dsn=dsn)
         school.init_table()
-        return render_template('home.html', current_time=now.ctime())
+        return "Deneme donusu"
     except Exception as e:
         logging.error(str(e))
 
