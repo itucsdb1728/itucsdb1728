@@ -21,7 +21,7 @@ app = Flask(__name__)
 #     return dsn
 
 #for local
-dsn = """user='root' password='123' host='localhost' port=5000
+dsn = """user='root' password='123' host='localhost' port=5432
               dbname='db_yoklama'"""
 
 
@@ -38,6 +38,7 @@ def create_db():
         school.init_table()
         return "Deneme donusu"
     except Exception as e:
+        print("server_py hatasi")
         logging.error(str(e))
 
 
@@ -47,4 +48,4 @@ if __name__ == '__main__':
         port, debug = int(VCAP_APP_PORT), False
     else:
         port, debug = 5000, True
-    app.run(host='0.0.0.0', port=port, debug=debug)
+    app.run(host='localhost', port=port, debug=debug)

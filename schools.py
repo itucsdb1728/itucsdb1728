@@ -18,11 +18,11 @@ class Schools:
 
     def init_table(self):
         try:
-            with dbapi.connect(self.dsn) as connection: 
+            with dbapi.connect(self.dsn) as connection:
                 cursor = connection.cursor()
                 query = """CREATE TABLE schools_table (
-                            id integer PRIMARY KEY DEFAULT nextval('serial'),
-                            school_name text UNIQUE NOT NULL)
+                            id integer PRIMARY KEY,
+                            school_name text NOT NULL)
                             """
                 cursor.execute(query)
 
@@ -34,6 +34,7 @@ class Schools:
 
                 connection.commit()
         except Exception as e:
+            print("Hata var")
             logging.error(str(e))
         #return redirect(url_for('/'))
 
