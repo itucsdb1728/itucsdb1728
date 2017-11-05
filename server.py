@@ -23,7 +23,12 @@ app = Flask(__name__)
 #     return dsn
 
 #for local
+<<<<<<< HEAD
 dsn = """user='root' password='123' host='localhost' port=5432 dbname='db_yoklama'"""
+=======
+dsn = """user='root' password='123' host='localhost' port=5432
+              dbname='db_yoklama'"""
+>>>>>>> 75f8ea508c057e8341d77e3bb6270fbaf24697d2
 
 
 @app.route('/')
@@ -33,6 +38,7 @@ def home_page():
 
 @app.route('/create_db')
 def create_db():
+<<<<<<< HEAD
     #now = datetime.datetime.now()
     school = School(dsn=dsn)
     school.init_table()
@@ -44,6 +50,16 @@ def create_db():
     parent.init_table()
     #return render_template('home.html', current_time=now.ctime())
     return "YAZDIKK"
+=======
+    try:
+        now = datetime.datetime.now()
+        school = Schools(dsn=dsn)
+        school.init_table()
+        return "Deneme donusu"
+    except Exception as e:
+        print("server_py hatasi")
+        logging.error(str(e))
+>>>>>>> 75f8ea508c057e8341d77e3bb6270fbaf24697d2
 
 
 if __name__ == '__main__':
@@ -52,4 +68,4 @@ if __name__ == '__main__':
         port, debug = int(VCAP_APP_PORT), False
     else:
         port, debug = 5000, True
-    app.run(host='0.0.0.0', port=port, debug=debug)
+    app.run(host='localhost', port=port, debug=debug)
