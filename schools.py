@@ -18,7 +18,7 @@ class Schools:
 
     def init_table(self):
         try:
-            with dbapi.connect(self.dsn) as connection:
+            with dbapi.connect(self.dsn) as connection: 
                 cursor = connection.cursor()
                 query = """CREATE TABLE schools_table (
                             id integer PRIMARY KEY DEFAULT nextval('serial'),
