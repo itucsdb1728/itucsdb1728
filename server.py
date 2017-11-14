@@ -24,7 +24,6 @@ def get_elephantsql_dsn(vcap_services):
              dbname='{}'""".format(user, password, host, port, dbname)
     return dsn
 
-#dsn = """user='root' password='123' host='localhost' port=5432 dbname='db_yoklama'"""
 
 @app.route('/')
 def home_page():
@@ -34,7 +33,6 @@ def home_page():
 @app.route('/create_db')
 def create_db():
 
-    #now = datetime.datetime.now()
     school = School(dsn=app.config['dsn'])
     school.init_table()
 
@@ -43,7 +41,6 @@ def create_db():
 
     parent = Parent(dsn=app.config['dsn'])
     parent.init_table()
-    #return render_template('home.html', current_time=now.ctime())
     return "YAZDIKK"
 
     try:
@@ -70,5 +67,4 @@ if __name__ == '__main__':
     else:
         app.config['dsn'] = """user='root' password='123' host='localhost' port=5432 dbname='db_yoklama'"""
 
-    #app.run(host='localhost', port=port, debug=debug)
     app.run(host='0.0.0.0',port=port,debug=debug)
