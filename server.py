@@ -12,24 +12,17 @@ from parent import Parent
 app = Flask(__name__)
 
 
-# def get_elephantsql_dsn(vcap_services):
-#     """Returns the data source name for ElephantSQL."""
-#     parsed = json.loads(vcap_services)
-#     uri = parsed["elephantsql"][0]["credentials"]["uri"]
-#     match = re.match('postgres://(.*?):(.*?)@(.*?)(:(\d+))?/(.*)', uri)
-#     user, password, host, _, port, dbname = match.groups()
-#     dsn = """user='{}' password='{}' host='{}' port={}
-#              dbname='{}'""".format(user, password, host, port, dbname)
-#     return dsn
+def get_elephantsql_dsn(vcap_services):
+    """Returns the data source name for ElephantSQL."""
+    parsed = json.loads(vcap_services)
+    uri = parsed["elephantsql"][0]["credentials"]["uri"]
+    match = re.match('postgres://(.*?):(.*?)@(.*?)(:(\d+))?/(.*)', uri)
+    user, password, host, _, port, dbname = match.groups()
+    dsn = """user='{}' password='{}' host='{}' port={}
+             dbname='{}'""".format(user, password, host, port, dbname)
+    return dsn
 
-#for local
-<<<<<<< HEAD
-dsn = """user='root' password='123' host='localhost' port=5432 dbname='db_yoklama'"""
-=======
-dsn = """user='root' password='123' host='localhost' port=5432
-              dbname='db_yoklama'"""
->>>>>>> 75f8ea508c057e8341d77e3bb6270fbaf24697d2
-
+#dsn = """user='root' password='123' host='localhost' port=5432 dbname='db_yoklama'"""
 
 @app.route('/')
 def home_page():
@@ -38,28 +31,28 @@ def home_page():
 
 @app.route('/create_db')
 def create_db():
-<<<<<<< HEAD
+
     #now = datetime.datetime.now()
-    school = School(dsn=dsn)
+    school = School(dsn=app.config['dsn'])
     school.init_table()
 
-    teacher = Teacher(dsn=dsn)
+    teacher = Teacher(dsn=app.config['dsn'])
     teacher.init_table()
 
-    parent = Parent(dsn=dsn)
+    parent = Parent(dsn=app.config['dsn'])
     parent.init_table()
     #return render_template('home.html', current_time=now.ctime())
     return "YAZDIKK"
-=======
+
     try:
         now = datetime.datetime.now()
-        school = Schools(dsn=dsn)
+        school = School(dsn=app.config['dsn'])
         school.init_table()
         return "Deneme donusu"
     except Exception as e:
         print("server_py hatasi")
         logging.error(str(e))
->>>>>>> 75f8ea508c057e8341d77e3bb6270fbaf24697d2
+
 
 
 if __name__ == '__main__':
