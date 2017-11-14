@@ -1,5 +1,7 @@
 import datetime
+import json
 import os
+import re
 import traceback
 import logging
 import psycopg2 as dbapi2
@@ -60,5 +62,13 @@ if __name__ == '__main__':
     if VCAP_APP_PORT is not None:
         port, debug = int(VCAP_APP_PORT), False
     else:
-        port, debug = 5000, True
-    app.run(host='localhost', port=port, debug=debug)
+        port,debug = 5000,True
+
+    VCAP_SERVICES = os.getenv('VCAP_SERVICES')
+    if VCAP_SERVICES is not None:
+        app.config['dsn'] = get_elephantsql_dsn(VCAP_SERVICES)
+    else:
+        app.config['dsn'] = """user='root' password='123' host='localhost' port=5432 dbname='db_yoklama'"""
+
+    #app.run(host='localhost', port=port, debug=debug)
+    app.run(host='0.0.0.0',port=port,debug=debug)
