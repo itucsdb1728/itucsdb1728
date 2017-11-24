@@ -28,20 +28,16 @@ class Teacher:
                         branch VARCHAR(40),
                         isManager BOOLEAN not null)"""
             #print(query)
-            cursor.execute(query)
-
-
-            # query = """INSERT INTO schools_table (school_name)
-            #             VALUES
-            #             ('mehmet akif')"""
-            # cursor.execute(query)
-
             connection.commit()
-    # except Exception as e:
-        #     logging.error(str(e))
-        #return redirect(url_for('/'))
-
-    # def add_school(self,school_name):
-    #     with dbapi.connect(self.dsn) as connection:
-    #         cursor = connection.cursor()
-    #         query = """INSERT INTO schools_table (school_name) VALUES ('%s')"""%(school_name)
+            cursor.execute(query)
+    def insert_teacher(self):
+        
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """INSERT INTO teacher_table VALUES
+                        ('Boran', 'Sivrikaya', 'Math', TRUE) """
+            #print(query) 
+            #yukardaki queryde sıkıntı olabilir
+            cursor.execute(query)
+            connection.commit()
+    

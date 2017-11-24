@@ -11,6 +11,8 @@ from flask import render_template
 from school import School
 from teacher import Teacher
 from parent import Parent
+from teacheraccount import TeacherAccount 
+
 app = Flask(__name__)
 
 
@@ -41,16 +43,15 @@ def create_db():
 
     parent = Parent(dsn=app.config['dsn'])
     parent.init_table()
+
+    teacher_account = TeacherAccount(dsn=app.config['dsn'])
+    teacher_account.init_table()
+    teacher_account.insert_teacher_account()
+    
+    
     return "YAZDIKK"
 
-    try:
-        now = datetime.datetime.now()
-        school = School(dsn=app.config['dsn'])
-        school.init_table()
-        return "Deneme donusu"
-    except Exception as e:
-        print("server_py hatasi")
-        logging.error(str(e))
+    
 
 
 

@@ -21,26 +21,24 @@ class TeacherAccount:
         #try:
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
-            query = """CREATE TABLE IF NOT EXISTS teacher_table(
+            query = """CREATE TABLE IF NOT EXISTS teacher_account_table(
                         id SERIAL primary key,
-                        teacher_id INTEGER NOT NULL REFERENCES teacher_table(id) ON DELETE CASCADE ON UPDATE CASCADE,
+                        #(burası geçici olarak ip
+                        # tal)teacher_id INTEGER NOT NULL REFERENCES teacher_table(id) ON DELETE CASCADE ON UPDATE CASCADE,
                         userName VARCHAR(60) not null,
                         password VARCHAR(60) not null)"""
             #print(query)
             cursor.execute(query)
-
-
-            # query = """INSERT INTO schools_table (school_name)
-            #             VALUES
-            #             ('mehmet akif')"""
-            # cursor.execute(query)
-
             connection.commit()
-    # except Exception as e:
-        #     logging.error(str(e))
-        #return redirect(url_for('/'))
 
-    # def add_school(self,school_name):
-    #     with dbapi.connect(self.dsn) as connection:
-    #         cursor = connection.cursor()
-    #         query = """INSERT INTO schools_table (school_name) VALUES ('%s')"""%(school_name)
+    def insert_teacher_account(self):
+        
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """INSERT INTO teacher_account_table VALUES
+                        ('crazyboy', '123456boran') """
+            #print(query) 
+            #yukardaki queryde sıkıntı olabilir
+            cursor.execute(query)
+            connection.commit()
+    
