@@ -27,7 +27,7 @@ class Teacher:
                         surname VARCHAR(60) not null,
                         branch VARCHAR(40),
                         isManager BOOLEAN not null)"""
-            #print(query)
+            
             connection.commit()
             cursor.execute(query)
     def insert_teacher(self):
@@ -35,9 +35,8 @@ class Teacher:
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
             query = """INSERT INTO teacher_table VALUES
-                        ('Boran', 'Sivrikaya', 'Math', TRUE) """
-            #print(query) 
-            #yukardaki queryde sıkıntı olabilir
+                        (DEFAULT,'Boran', 'Sivrikaya', 'Math', TRUE) """
+            
             cursor.execute(query)
             connection.commit()
     

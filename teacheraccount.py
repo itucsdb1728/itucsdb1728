@@ -23,11 +23,9 @@ class TeacherAccount:
             cursor = connection.cursor()
             query = """CREATE TABLE IF NOT EXISTS teacher_account_table(
                         id SERIAL primary key,
-                        #(burası geçici olarak ip
-                        # tal)teacher_id INTEGER NOT NULL REFERENCES teacher_table(id) ON DELETE CASCADE ON UPDATE CASCADE,
+                        teacher_id INTEGER NOT NULL REFERENCES teacher_table(id) ON DELETE CASCADE ON UPDATE CASCADE,
                         userName VARCHAR(60) not null,
                         password VARCHAR(60) not null)"""
-            #print(query)
             cursor.execute(query)
             connection.commit()
 
@@ -36,9 +34,8 @@ class TeacherAccount:
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
             query = """INSERT INTO teacher_account_table VALUES
-                        ('crazyboy', '123456boran') """
-            #print(query) 
-            #yukardaki queryde sıkıntı olabilir
+                        (DEFAULT, 1, 'crazyboy', '123456boran') """
+            
             cursor.execute(query)
             connection.commit()
     

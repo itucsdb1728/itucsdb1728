@@ -30,6 +30,7 @@ def get_elephantsql_dsn(vcap_services):
 @app.route('/')
 def home_page():
     now = datetime.datetime.now()
+    #deneme
     return render_template('home.html', current_time=now.ctime())
 
 @app.route('/create_db')
@@ -40,6 +41,7 @@ def create_db():
 
     teacher = Teacher(dsn=app.config['dsn'])
     teacher.init_table()
+    teacher.insert_teacher()
 
     parent = Parent(dsn=app.config['dsn'])
     parent.init_table()
