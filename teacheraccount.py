@@ -5,6 +5,7 @@ import traceback
 import logging
 import psycopg2 as dbapi2
 #import sys
+from flask import request
 from flask import render_template
 from flask import Flask
 from flask import redirect
@@ -23,22 +24,29 @@ class TeacherAccount:
             cursor = connection.cursor()
             query = """CREATE TABLE IF NOT EXISTS teacher_account_table(
                         id SERIAL primary key,
-                        #(burası geçici olarak ip
-                        # tal)teacher_id INTEGER NOT NULL REFERENCES teacher_table(id) ON DELETE CASCADE ON UPDATE CASCADE,
+                        teacher_id INTEGER NOT NULL REFERENCES teacher_table(id) ON DELETE CASCADE ON UPDATE CASCADE,
                         userName VARCHAR(60) not null,
                         password VARCHAR(60) not null)"""
             #print(query)
             cursor.execute(query)
             connection.commit()
-
-    def insert_teacher_account(self):
-        
+    
+    def insert_teacher_account(self):       
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
             query = """INSERT INTO teacher_account_table VALUES
-                        ('crazyboy', '123456boran') """
-            #print(query) 
-            #yukardaki queryde sıkıntı olabilir
+                        (DEFAULT,1,'crazyboy', '123456boran') """
             cursor.execute(query)
             connection.commit()
-    
+
+    def login_check(self,username,password):
+        with dbapi2.connect(self.dsn)  as connection:
+            query="SELECT * FROM teacher_account_table WHERE username='%s' AND password='%s'" %(username,password)
+            cursor=connection.cursor()
+            cursor.execute(query)
+            is_exist=cursor.fetchall()
+            if is_exist is None:
+                return "wrong username or password"
+            else:
+                return "WELCOME!"
+        

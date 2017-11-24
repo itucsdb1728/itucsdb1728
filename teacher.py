@@ -35,9 +35,7 @@ class Teacher:
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
             query = """INSERT INTO teacher_table VALUES
-                        ('Boran', 'Sivrikaya', 'Math', TRUE) """
-            #print(query) 
-            #yukardaki queryde sıkıntı olabilir
+                        (DEFAULT,'Boran', 'Sivrikaya', 'Math', TRUE) """
             cursor.execute(query)
             connection.commit()
     

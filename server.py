@@ -6,6 +6,7 @@ import traceback
 import logging
 import psycopg2 as dbapi2
 #import sys
+from flask import request
 from flask import Flask
 from flask import render_template
 from school import School
@@ -30,7 +31,8 @@ def get_elephantsql_dsn(vcap_services):
 @app.route('/')
 def home_page():
     now = datetime.datetime.now()
-    return render_template('home.html', current_time=now.ctime())
+    return render_template('login.html')
+
 
 @app.route('/create_db')
 def create_db():
@@ -40,6 +42,7 @@ def create_db():
 
     teacher = Teacher(dsn=app.config['dsn'])
     teacher.init_table()
+    teacher.insert_teacher()
 
     parent = Parent(dsn=app.config['dsn'])
     parent.init_table()
@@ -51,9 +54,11 @@ def create_db():
     
     return "YAZDIKK"
 
-    
-
-
+@app.route("/login",methods=["POST"])
+def login():
+    teacher_account = TeacherAccount(dsn=app.config['dsn'])
+    yazdir=teacher_account.login_check(request.form["username"],request.form["password"])
+    return yazdir
 
 if __name__ == '__main__':
     VCAP_APP_PORT = os.getenv('VCAP_APP_PORT')
