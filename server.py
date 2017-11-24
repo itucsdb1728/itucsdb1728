@@ -41,19 +41,15 @@ def create_db():
 
     teacher = Teacher(dsn=app.config['dsn'])
     teacher.init_table()
-    teacher.insert_teacher()
+    teacher.insert_teacher('Boran','Sivrikaya','Math',False)
 
     parent = Parent(dsn=app.config['dsn'])
     parent.init_table()
 
     teacher_account = TeacherAccount(dsn=app.config['dsn'])
     teacher_account.init_table()
-    teacher_account.insert_teacher_account()
-    
-    
-    return "YAZDIKK"
-
-    
+    teacher_account.insert_teacher_account('Boran','Sivrikaya','crazyboy','123456boran')
+    return "YAZDIKK" 
 
 
 

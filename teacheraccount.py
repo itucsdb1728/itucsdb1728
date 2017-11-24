@@ -29,13 +29,25 @@ class TeacherAccount:
             cursor.execute(query)
             connection.commit()
 
-    def insert_teacher_account(self):
+    def insert_teacher_account(self, name, surname, username, password):
         
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
-            query = """INSERT INTO teacher_account_table VALUES
-                        (DEFAULT, 1, 'crazyboy', '123456boran') """
+
+            query = """SELECT id FROM teacher_table WHERE(name = (%s) AND surname = (%s))"""
+            param = (name, surname)
+
+            cursor.execute(query,param)
+            teacher_id = cursor.fetchall()
+
+            print(teacher_id);
+
             
-            cursor.execute(query)
+            query = """INSERT INTO teacher_account_table VALUES
+                        (DEFAULT,(%s),(%s),(%s)) """
+            param = (teacher_id[0], username, password)
+            
+            
+            cursor.execute(query,param)
             connection.commit()
     
