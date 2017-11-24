@@ -42,23 +42,24 @@ def create_db():
 
     teacher = Teacher(dsn=app.config['dsn'])
     teacher.init_table()
-    teacher.insert_teacher()
+    teacher.insert_teacher('Boran','Sivrikaya','Math',False)
 
     parent = Parent(dsn=app.config['dsn'])
     parent.init_table()
 
     teacher_account = TeacherAccount(dsn=app.config['dsn'])
     teacher_account.init_table()
-    teacher_account.insert_teacher_account()
+    teacher_account.insert_teacher_account('Boran','Sivrikaya','crazyboy','123456boran')
+    return "YAZDIKK" 
     
-    
-    return "YAZDIKK"
-
 @app.route("/login",methods=["POST"])
 def login():
     teacher_account = TeacherAccount(dsn=app.config['dsn'])
     yazdir=teacher_account.login_check(request.form["username"],request.form["password"])
     return yazdir
+
+
+
 
 if __name__ == '__main__':
     VCAP_APP_PORT = os.getenv('VCAP_APP_PORT')
