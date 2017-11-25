@@ -38,6 +38,7 @@ def create_db():
 
     school = School(dsn=app.config['dsn'])
     school.init_table()
+    #deneme
 
     teacher = Teacher(dsn=app.config['dsn'])
     teacher.init_table()
