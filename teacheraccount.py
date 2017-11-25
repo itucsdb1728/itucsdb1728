@@ -5,6 +5,7 @@ import traceback
 import logging
 import psycopg2 as dbapi2
 #import sys
+from flask import request
 from flask import render_template
 from flask import Flask
 from flask import redirect
@@ -50,4 +51,15 @@ class TeacherAccount:
             
             cursor.execute(query,param)
             connection.commit()
-    
+
+    def login_check(self,username,password):
+        with dbapi2.connect(self.dsn)  as connection:
+            query="SELECT * FROM teacher_account_table WHERE username='%s' AND password='%s'" %(username,password)
+            cursor=connection.cursor()
+            cursor.execute(query)
+            is_exist=cursor.fetchall()
+            if is_exist is None:
+                return "wrong username or password"
+            else:
+                return "WELCOME!"
+        
