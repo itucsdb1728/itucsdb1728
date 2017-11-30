@@ -2,7 +2,7 @@ import datetime
 import os
 import traceback
 import logging
-import psycopg2 as dbapi
+import psycopg2 as dbapi2
 from flask import render_template
 from flask import Flask
 from flask import redirect
@@ -16,20 +16,24 @@ class Student:
         return
 
     def init_table(self):
-        try:
-            with dbapi.connect(self.dsn) as connection: 
+        with dbapi2.connect(self.dsn) as connection: 
+            cursor = connection.cursor()
+            query = """CREATE TABLE IF NOT EXISTS student_table (
+                        id SERIAL PRIMARY KEY,
+                        name VARCHAR(30) NOT NULL,
+                        surname VARCHAR(30) NOT NULL,
+                        email VARCHAR(30)
+                        )
+                        """
+            cursor.execute(query)
+            connection.commit()
 
-                cursor = connection.cursor()
-                query = """CREATE TABLE IF NOT EXISTS student_table (
-                            id INTEGER PRIMARY KEY SERIAL,
-                            name VARCHAR(30) NOT NULL
-                            surname VARCHAR(30) NOT NULL
-                            email VARCHAR(30)
-                            )
-                            """
-                cursor.execute(query)
-
-                connection.commit()
-        except Exception as e:
-            print("Hata var")
-            logging.error(str(e))
+    def add_student(self, name, surname, branch, ismanager):        
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """INSERT INTO teacher_table VALUES
+                        (DEFAULT,(%s),(%s),(%s),(%s)) """
+            param = (name, surname, branch ,ismanager)            
+            cursor.execute(query,param)
+            connection.commit()
+        return redirect(url_for('dashboard_add_teacher'))    

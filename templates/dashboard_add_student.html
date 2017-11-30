@@ -1,0 +1,19 @@
+<html>
+
+<head>
+    <title>
+        Dashboard
+    </title>
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/login.css">
+</head>
+
+<body>
+    <button class="btn mrg col-lg-3"><a href="{{ url_for('add_school') }}" type="submit"> ADD SCHOOL </a> </button>
+    <button class="btn mrg col-lg-3"><a href="{{ url_for('add_class') }}" type="submit"> ADD CLASS </a> </button>
+    <button class="btn mrg col-lg-3"><a href="{{ url_for('add_teacher') }}" type="submit"> ADD TEACHER </a> </button>
+    <button class="btn mrg col-lg-3"><a href="{{ url_for('add_student') }}" type="submit"> ADD STUDENT </a> </button>
+    <button class="btn mrg col-lg-3"><a href="{{ url_for('add_parent') }}" type="submit"> ADD PARENT </a> </button>
+</body>
+
+</html>

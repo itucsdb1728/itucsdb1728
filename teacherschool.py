@@ -12,7 +12,7 @@ from flask.helpers import url_for
 
 app = Flask(__name__)
 
-class StudentSchool:
+class TeacherSchool:
     def __init__(self,dsn):
         self.dsn = dsn
         return

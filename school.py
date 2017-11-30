@@ -18,27 +18,18 @@ class School:
         return
 
     def init_table(self):
-        #try:
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
-            query = """CREATE TABLE IF NOT EXISTS schools_table(
+            query = """CREATE TABLE IF NOT EXISTS school_table(
                 id SERIAL primary key,
-                school_name text not null)"""
-            #print(query)
+                school_name varchar(100) not null)"""
             cursor.execute(query)
-
-
-            # query = """INSERT INTO schools_table (school_name)
-            #             VALUES
-            #             ('mehmet akif')"""
-            # cursor.execute(query)
-
             connection.commit()
-    # except Exception as e:
-        #     logging.error(str(e))
-        #return redirect(url_for('/'))
 
-    # def add_school(self,school_name):
-    #     with dbapi.connect(self.dsn) as connection:
-    #         cursor = connection.cursor()
-    #         query = """INSERT INTO schools_table (school_name) VALUES ('%s')"""%(school_name)
+    def add_school(self,school_name):
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """INSERT INTO schools_table VALUES (DEFAULT,('%s')) """%(school_name)
+            cursor.execute(query)
+            connection.commit()
+        return redirect(url_for('dashboard_add_school'))
