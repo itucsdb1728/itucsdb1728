@@ -1,0 +1,18 @@
+<html>
+
+<head>
+    <title>
+        Dashboard
+    </title>
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap.min.css">
+</head>
+
+<body>
+    <form action="{{ url_for('dashboard_add_school') }}" method="post">
+        <input type="text" name="school_name" placeholder="Please enter the school name">
+        <input type="submit" value="Ok">
+    </form>
+
+</body>
+
+</html>

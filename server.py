@@ -6,12 +6,15 @@ import traceback
 import logging
 import psycopg2 as dbapi2
 #import sys
+from flask.helpers import url_for
 from flask import request
 from flask import Flask
 from flask import render_template
 from school import School
+from classes import Classes
 from teacher import Teacher
 from parent import Parent
+<<<<<<< HEAD
 from teacheraccount import TeacherAccount
 from student import Student
 from classroom import Classroom
@@ -26,6 +29,18 @@ from student_class import Student_Class
 from studentparent import StudentParent
 from studentschool import StudentSchool
 from teacherschool import TeacherSchool
+=======
+from student import Student
+from studentschool import StudentSchool
+from studentclass import StudentClass
+from schoolclass import SchoolClass
+from studentparent import StudentParent
+from teacheraccount import TeacherAccount
+from teacherschool import TeacherSchool
+from attendance import Attendance
+from schedule import Schedule
+from teacheraccount import TeacherAccount 
+>>>>>>> 7821c5b139acab231b0b0ceaf061040e9c0d9be8
 
 app = Flask(__name__)
 
@@ -52,6 +67,7 @@ def create_db():
 
     school = School(dsn=app.config['dsn'])
     school.init_table()
+<<<<<<< HEAD
     #deneme
 
     teacher = Teacher(dsn=app.config['dsn'])
@@ -186,6 +202,49 @@ def create_db():
 
 
     
+=======
+    
+    student = Student(dsn=app.config['dsn'])
+    student.init_table()
+
+    teacher = Teacher(dsn=app.config['dsn'])
+    teacher.init_table()
+    #teacher.insert_teacher('Hamza','Tuna','Science',True)
+
+    classes = Classes(dsn=app.config['dsn'])
+    classes.init_table()
+
+    teacher_account = TeacherAccount(dsn=app.config['dsn'])
+    teacher_account.init_table()
+    #teacher_account.insert_teacher_account('Boran','Sivrikaya','crazyboy','123456boran')
+
+    parent = Parent(dsn=app.config['dsn'])
+    parent.init_table()
+
+
+    school_class = SchoolClass(dsn=app.config['dsn'])
+    school_class.init_table()
+
+
+    teacher_school = TeacherSchool(dsn=app.config['dsn'])
+    teacher_school.init_table()
+
+    student_school = StudentSchool(dsn=app.config['dsn'])
+    student_school.init_table()
+
+    student_parent = StudentParent(dsn=app.config['dsn'])
+    student_parent.init_table()
+
+    student_class = StudentClass(dsn=app.config['dsn'])
+    student_class.init_table()
+
+    schedule = Schedule(dsn=app.config['dsn'])
+    schedule.init_table()
+
+    attendence = Attendance(dsn=app.config['dsn'])
+    attendence.init_table()
+
+>>>>>>> 7821c5b139acab231b0b0ceaf061040e9c0d9be8
     return "YAZDIKK" 
     
 @app.route("/login",methods=["POST"])
@@ -193,6 +252,44 @@ def login():
     teacher_account = TeacherAccount(dsn=app.config['dsn'])
     yazdir=teacher_account.login_check(request.form["username"],request.form["password"])
     return yazdir
+
+@app.route("/dashboard",methods=["GET"])
+def dashboard(key=None):
+    if key is None:
+        return render_template('dashboard.html')
+    else:
+        return "DONNNN   "
+
+@app.route("/dashboard/add_school",methods=["GET","POST"])
+def dashboard_add_school():
+    if 'school_name' in request.form:
+        school_name = request.form['school_name']
+        if not school_name=="":
+            page = School(dsn = app.config['dsn'])
+            return page.add_school(school_name)
+        else:
+            return "bos"
+    else: 
+        return render_template('dashboard_add_school.html')
+
+@app.route("/dashboard/add_class")
+def dashboard_add_class():
+    return "add class"
+
+@app.route("/dashboard/add_teacher")
+def dashboard_add_teacher():
+    return "add teacher"
+
+@app.route("/dashboard/add_student")
+def dashboard_add_student():
+    return "add student"
+
+@app.route("/dashboard/add_parent")
+def dashboard_add_parent():
+    return "add parent"
+
+
+
 
 
 

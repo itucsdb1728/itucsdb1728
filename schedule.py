@@ -16,6 +16,7 @@ class Schedule:
         return
 
     def init_table(self):
+<<<<<<< HEAD
             with dbapi2.connect(self.dsn) as connection: 
 
                 cursor = connection.cursor()
@@ -79,3 +80,18 @@ class Schedule:
             connection.commit()
 
             return id
+=======
+        with dbapi.connect(self.dsn) as connection: 
+
+            cursor = connection.cursor()
+            query = """CREATE TABLE IF NOT EXISTS schedule_table (
+                        id SERIAL PRIMARY KEY,
+                        class_id INTEGER NOT NULL REFERENCES class_table(id) ON DELETE CASCADE ON UPDATE CASCADE,
+                        lesson_id INTEGER NOT NULL REFERENCES lesson_table(id) ON DELETE CASCADE ON UPDATE CASCADE,
+                        teacher_id INTEGER NOT NULL REFERENCES teacher_table(id) ON DELETE CASCADE ON UPDATE CASCADE,
+                        year INTEGER NOT NULL CHECK (year >= 2012 AND year<=2053)
+                        )
+                        """
+            cursor.execute(query)
+            connection.commit()
+>>>>>>> 7821c5b139acab231b0b0ceaf061040e9c0d9be8

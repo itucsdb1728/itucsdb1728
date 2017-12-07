@@ -30,17 +30,21 @@ class Teacher:
             
             connection.commit()
             cursor.execute(query)
+<<<<<<< HEAD
     
     def insert_teacher(self, name, surname, branch, ismanager):
         
+=======
+    def add_teacher(self, name, surname, branch, ismanager):        
+>>>>>>> 7821c5b139acab231b0b0ceaf061040e9c0d9be8
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
             query = """INSERT INTO teacher_table VALUES
                         (DEFAULT,(%s),(%s),(%s),(%s)) """
-            param = (name, surname, branch ,ismanager)
-            
+            param = (name, surname, branch ,ismanager)            
             cursor.execute(query,param)
             connection.commit()
+<<<<<<< HEAD
 
     def delete_teacher(self, id):
         
@@ -81,4 +85,7 @@ class Teacher:
             return id
 
 
+=======
+        return redirect(url_for('dashboard_add_teacher'))
+>>>>>>> 7821c5b139acab231b0b0ceaf061040e9c0d9be8
     

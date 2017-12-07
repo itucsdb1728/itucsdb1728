@@ -16,6 +16,7 @@ class Student:
         return
 
     def init_table(self):
+<<<<<<< HEAD
         
             with dbapi2.connect(self.dsn) as connection: 
 
@@ -80,3 +81,26 @@ class Student:
 
             return id
         
+=======
+        with dbapi2.connect(self.dsn) as connection: 
+            cursor = connection.cursor()
+            query = """CREATE TABLE IF NOT EXISTS student_table (
+                        id SERIAL PRIMARY KEY,
+                        name VARCHAR(30) NOT NULL,
+                        surname VARCHAR(30) NOT NULL,
+                        email VARCHAR(30)
+                        )
+                        """
+            cursor.execute(query)
+            connection.commit()
+
+    def add_student(self, name, surname, branch, ismanager):        
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """INSERT INTO teacher_table VALUES
+                        (DEFAULT,(%s),(%s),(%s),(%s)) """
+            param = (name, surname, branch ,ismanager)            
+            cursor.execute(query,param)
+            connection.commit()
+        return redirect(url_for('dashboard_add_teacher'))    
+>>>>>>> 7821c5b139acab231b0b0ceaf061040e9c0d9be8

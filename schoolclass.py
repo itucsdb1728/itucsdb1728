@@ -10,7 +10,7 @@ from flask.helpers import url_for
 
 app = Flask(__name__)
 
-class School_Class:
+class SchoolClass:
     def __init__(self,dsn):
         self.dsn = dsn
         return
