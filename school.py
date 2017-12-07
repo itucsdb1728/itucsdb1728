@@ -18,27 +18,61 @@ class School:
         return
 
     def init_table(self):
-        #try:
+        
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
             query = """CREATE TABLE IF NOT EXISTS schools_table(
                 id SERIAL primary key,
-                school_name text not null)"""
-            #print(query)
+                school_name varchar(100) not null)"""
+            
             cursor.execute(query)
 
-
-            # query = """INSERT INTO schools_table (school_name)
-            #             VALUES
-            #             ('mehmet akif')"""
-            # cursor.execute(query)
-
+    def insert_school(self, school_name):
+            
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """INSERT INTO schools_table VALUES
+                        (DEFAULT,(%s)) """
+            param = (school_name,)
+            
+            cursor.execute(query,param)
             connection.commit()
-    # except Exception as e:
-        #     logging.error(str(e))
-        #return redirect(url_for('/'))
 
-    # def add_school(self,school_name):
-    #     with dbapi.connect(self.dsn) as connection:
-    #         cursor = connection.cursor()
-    #         query = """INSERT INTO schools_table (school_name) VALUES ('%s')"""%(school_name)
+    def delete_school(self, id):
+        
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """DELETE FROM schools_table WHERE
+                        (id = (%s)) """
+            param = (id)
+            
+            cursor.execute(query,param)
+            connection.commit()
+
+    def update_school(self, id, new_school_name):
+        
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """UPDATE schools_table SET school_name = (%s)
+                        WHERE id = (%s) """
+            param = (new_school_name, id)
+            
+            cursor.execute(query,param)
+            connection.commit()
+
+    def get_school_id(self, school_name):
+        
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """SELECT id FROM schools_table WHERE
+                        (school_name = (%s)) """
+            param = (school_name,)
+            
+            cursor.execute(query,param)
+
+            id = cursor.fetchone()
+            
+            connection.commit()
+
+            return id
+   

@@ -10,7 +10,7 @@ from flask.helpers import url_for
 
 app = Flask(__name__)
 
-class School_Class:
+class Classroom:
     def __init__(self,dsn):
         self.dsn = dsn
         return
@@ -19,56 +19,55 @@ class School_Class:
             with dbapi2.connect(self.dsn) as connection: 
 
                 cursor = connection.cursor()
-                query = """CREATE TABLE IF NOT EXISTS school_class_table (
+                query = """CREATE TABLE IF NOT EXISTS classroom_table (
                             id SERIAL PRIMARY KEY,
-                            class_id INTEGER NOT NULL REFERENCES classroom_table(id) ON DELETE CASCADE ON UPDATE CASCADE,
-                            school_id INTEGER NOT NULL REFERENCES schools_table(id) ON DELETE CASCADE ON UPDATE CASCADE
+                            name VARCHAR(7) NOT NULL,
+                            year INTEGER NOT NULL CHECK (year >= 2012 AND year<=2053)
                             )
                             """
                 cursor.execute(query)
-
                 connection.commit()
-
-    def insert_school_class(self, class_id, school_id):
+                
+    def insert_classroom(self, classroom_name, year):
             
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
-            query = """INSERT INTO school_class_table VALUES
+            query = """INSERT INTO classroom_table VALUES
                         (DEFAULT,(%s),(%s)) """
-            param = (class_id, school_id)
+            param = (classroom_name, year)
             
             cursor.execute(query,param)
             connection.commit()
 
-    def delete_school_class(self, id):
+    def delete_classroom(self, id):
         
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
-            query = """DELETE FROM school_class_table WHERE
+            query = """DELETE FROM classroom_table WHERE
                         (id = (%s)) """
             param = (id)
             
             cursor.execute(query,param)
             connection.commit()
 
-    def update_school_class(self, id, new_class_id, new_school_id):
+    def update_classroom(self, id, new_classroom_name, new_year):
         
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
-            query = """UPDATE school_class_table SET class_id = (%s), school_id = (%s)
+            query = """UPDATE classroom_table SET name = (%s), year = (%s)
                         WHERE id = (%s) """
-            param = (new_class_id, new_school_id ,id)
+            param = (new_classroom_name, new_year, id)
             
             cursor.execute(query,param)
             connection.commit()
 
-    def get_school_class_id(self, class_id, school_id):
+    def get_classroom_id(self, classroom_name, year):
         
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
-            query = """SELECT id FROM school_class_table WHERE
-                        (class_id = (%s) AND school_id = (%s)) """
-            param = (class_id, school_id)
+            query = """SELECT id FROM classroom_table WHERE
+                        (name = (%s) AND year = (%s)) """
+            param = (classroom_name, year)
             
             cursor.execute(query,param)
 
@@ -77,5 +76,6 @@ class School_Class:
             connection.commit()
 
             return id
+        
         
 

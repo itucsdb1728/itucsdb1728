@@ -12,7 +12,20 @@ from flask import render_template
 from school import School
 from teacher import Teacher
 from parent import Parent
-from teacheraccount import TeacherAccount 
+from teacheraccount import TeacherAccount
+from student import Student
+from classroom import Classroom
+from lesson import Lesson
+from parent import Parent
+from schedule import Schedule
+from session import Session
+from attendance import Attendance
+from grade import Grade
+from schoolclass import School_Class
+from student_class import Student_Class
+from studentparent import StudentParent
+from studentschool import StudentSchool
+from teacherschool import TeacherSchool
 
 app = Flask(__name__)
 
@@ -43,14 +56,136 @@ def create_db():
 
     teacher = Teacher(dsn=app.config['dsn'])
     teacher.init_table()
-    teacher.insert_teacher('Boran','Sivrikaya','Math',False)
-
+    
     parent = Parent(dsn=app.config['dsn'])
     parent.init_table()
 
     teacher_account = TeacherAccount(dsn=app.config['dsn'])
     teacher_account.init_table()
-    teacher_account.insert_teacher_account('Boran','Sivrikaya','crazyboy','123456boran')
+
+    student = Student(dsn=app.config['dsn'])
+    student.init_table()
+    #student.insert_student("Boran","Sivrikaya","hotmail")
+    #student.delete_student(student.get_student_id("Boran","Sivrikaya"))
+    #student.insert_student("Boran","Sivrikaya","hotmail")
+    #student.update_student(student.get_student_id("Boran","Sivrikaya"),"Hamza","Tuna","gmail")
+
+    school = School(dsn=app.config['dsn'])
+    school.init_table()
+    #school.insert_school("Makif")
+    #school.delete_school(school.get_school_id("Makif"))
+    #school.insert_school("GOP")
+    #school.update_school(school.get_school_id("GOP"),"IAFL")
+
+    classroom = Classroom(dsn=app.config['dsn'])
+    classroom.init_table()
+    #classroom.insert_classroom("9A",2013)
+    #classroom.delete_classroom(classroom.get_classroom_id("9A",2013))
+    #classroom.insert_classroom("10A",2013)
+    #classroom.update_classroom(classroom.get_classroom_id("10A",2013),"12C",2015)
+
+    lesson = Lesson(dsn=app.config['dsn'])
+    lesson.init_table()
+    #lesson.insert_lesson("Math")
+    #lesson.delete_lesson(lesson.get_lesson_id("Math"))
+    #lesson.insert_lesson("History")
+    #lesson.update_lesson(lesson.get_lesson_id("History"),"Science")
+
+    parent = Parent(dsn=app.config['dsn'])
+    parent.init_table()
+    #parent.insert_parent("Zekiye","Sivrikaya")
+    #parent.delete_parent(parent.get_parent_id("Zekiye","Sivrikaya"))
+    #parent.insert_parent("Hamdi","Sivrikaya")
+    #parent.update_parent(parent.get_parent_id("Hamdi","Sivrikaya"),"Ahmet","Yalcin")
+
+    schedule = Schedule(dsn=app.config['dsn'])
+    schedule.init_table()
+    #schedule.insert_schedule(5,4,6,2013)
+    #schedule.delete_schedule(schedule.get_schedule_id(5,4))
+    #schedule.insert_schedule(5,4,6,2013)
+    #schedule.update_schedule(schedule.get_schedule_id(5,4),3,4,6,2020)
+
+    session = Session(dsn=app.config['dsn'])
+    session.init_table()
+    #session.insert_session(3,"2-2-1922",3)
+    #session.delete_session(session.get_session_id(3,"2-2-1922",3))
+    #session.insert_session(3,"2-2-1922",7)
+    #session.update_session(session.get_session_id(3,"2-2-1922",7),4,"8-8-1994",1)
+
+    attendance = Attendance(dsn=app.config['dsn'])
+    attendance.init_table()
+    #attendance.insert_attendance(2,4,True)
+    #attendance.delete_attendance(attendance.get_attendance_id(2,4))
+    #attendance.insert_attendance(2,5,True)
+    #attendance.update_attendance(attendance.get_attendance_id(2,5),4,6,False)
+
+    grade = Grade(dsn=app.config['dsn'])
+    grade.init_table()
+    #grade.insert_grade(3,2,75,"Iyi not")
+    #grade.delete_grade(grade.get_grade_id(3,2))
+    #grade.insert_grade(3,2,85,"Daha iyi")
+    #grade.update_grade(grade.get_grade_id(3,2),4,4,20,"VF")
+
+    schoolclass = School_Class(dsn=app.config['dsn'])
+    schoolclass.init_table()
+    #schoolclass.insert_school_class(3,8)
+    #schoolclass.delete_school_class(schoolclass.get_school_class_id(3,8))
+    #schoolclass.insert_school_class(3,8)
+    #schoolclass.update_school_class(schoolclass.get_school_class_id(3,8),5,10)
+
+    student_class = Student_Class(dsn=app.config['dsn'])
+    student_class.init_table()
+    #student_class.insert_student_class(3,2)
+    #student_class.delete_student_class(student_class.get_student_class_id(3,2))
+    #student_class.insert_student_class(5,2)
+    #student_class.update_student_class(student_class.get_student_class_id(5,2),7,4)
+
+    studentparent = StudentParent(dsn=app.config['dsn'])
+    studentparent.init_table()
+    #studentparent.insert_studentparent(2,2)
+    #studentparent.delete_studentparent(studentparent.get_studentparent_id(2,2))
+    #studentparent.insert_studentparent(2,2)
+    #studentparent.update_studentparent(studentparent.get_studentparent_id(2,2),4,2)
+
+    studentschool = StudentSchool(dsn=app.config['dsn'])
+    studentschool.init_table()
+    #studentschool.insert_studentschool(2,8)
+    #studentschool.delete_studentschool(studentschool.get_studentschool_id(2,8))
+    #studentschool.insert_studentschool(4,10)
+    #studentschool.update_studentschool(studentschool.get_studentschool_id(4,10),4,12)
+
+    teacherschool = TeacherSchool(dsn=app.config['dsn'])
+    teacherschool.init_table()
+    #teacherschool.insert_teacherschool(2,8)
+    #teacherschool.delete_teacherschool(teacherschool.get_teacherschool_id(2,8))
+    #teacherschool.insert_teacherschool(4,10)
+    #teacherschool.update_teacherschool(teacherschool.get_teacherschool_id(4,10),6,12)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+    
     return "YAZDIKK" 
     
 @app.route("/login",methods=["POST"])

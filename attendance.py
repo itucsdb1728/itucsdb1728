@@ -2,7 +2,7 @@ import datetime
 import os
 import traceback
 import logging
-import psycopg2 as dbapi
+import psycopg2 as dbapi2
 from flask import render_template
 from flask import Flask
 from flask import redirect
@@ -16,12 +16,11 @@ class Attendance:
         return
 
     def init_table(self):
-        try:
-            with dbapi.connect(self.dsn) as connection: 
+            with dbapi2.connect(self.dsn) as connection: 
 
                 cursor = connection.cursor()
                 query = """CREATE TABLE IF NOT EXISTS attendance_table (
-                            id INTEGER PRIMARY KEY SERIAL,
+                            id SERIAL PRIMARY KEY,
                             student_id INTEGER NOT NULL REFERENCES student_table(id) ON DELETE CASCADE ON UPDATE CASCADE,
                             session_id INTEGER NOT NULL REFERENCES session_table(id) ON DELETE CASCADE ON UPDATE CASCADE,
                             situation BOOLEAN NOT NULL
@@ -30,6 +29,52 @@ class Attendance:
                 cursor.execute(query)
 
                 connection.commit()
-        except Exception as e:
-            print("Hata var")
-            logging.error(str(e))
+
+    def insert_attendance(self, student_id, session_id, situation):
+            
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """INSERT INTO attendance_table VALUES
+                        (DEFAULT,(%s),(%s),(%s)) """
+            param = (student_id, session_id, situation)
+            
+            cursor.execute(query,param)
+            connection.commit()
+
+    def delete_attendance(self, id):
+        
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """DELETE FROM attendance_table WHERE
+                        (id = (%s)) """
+            param = (id)
+            
+            cursor.execute(query,param)
+            connection.commit()
+
+    def update_attendance(self, id, new_student_id, new_session_id, new_situation):
+        
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """UPDATE attendance_table SET student_id = (%s), session_id = (%s), situation = (%s)
+                        WHERE id = (%s) """
+            param = (new_student_id, new_session_id, new_situation ,id)
+            
+            cursor.execute(query,param)
+            connection.commit()
+
+    def get_attendance_id(self, student_id, session_id):
+        
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """SELECT id FROM attendance_table WHERE
+                        (student_id = (%s) AND session_id = (%s)) """
+            param = (student_id, session_id)
+            
+            cursor.execute(query,param)
+
+            id = cursor.fetchone()
+            
+            connection.commit()
+
+            return id
