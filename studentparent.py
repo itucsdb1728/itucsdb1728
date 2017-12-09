@@ -76,3 +76,67 @@ class StudentParent:
             connection.commit()
 
             return id
+
+    def get_students_parent(self, student_id):
+        
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """SELECT parent_id FROM studentparent_table WHERE
+                        (student_id = (%s)) """
+            param = (student_id,)
+            
+            cursor.execute(query,param)
+
+            parent_id = cursor.fetchone()
+            
+            connection.commit()
+
+            return parent_id
+
+    def get_parents_student(self, parent_id):
+        
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """SELECT student_id FROM studentparent_table WHERE
+                        (parent_id = (%s)) """
+            param = (parent_id,)
+            
+            cursor.execute(query,param)
+
+            student_id = cursor.fetchone()
+            
+            connection.commit()
+
+            return student_id
+
+    def get_parents_all_students(self, parent_id):
+        
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """SELECT student_id FROM studentparent_table WHERE
+                        (parent_id = (%s)) """
+            param = (parent_id,)
+            
+            cursor.execute(query,param)
+
+            students = cursor.fetchall()
+            
+            connection.commit()
+
+            return students
+
+    def get_students_all_parents(self, student_id):
+        
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """SELECT parent_id FROM studentparent_table WHERE
+                        (student_id = (%s)) """
+            param = (student_id,)
+            
+            cursor.execute(query,param)
+
+            parents = cursor.fetchall()
+            
+            connection.commit()
+
+            return parents

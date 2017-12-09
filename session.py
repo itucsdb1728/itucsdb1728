@@ -78,3 +78,19 @@ class Session:
             connection.commit()
 
             return id
+
+    def get_session(self, id):
+        
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """SELECT * FROM session_table WHERE
+                        (id = (%s)) """
+            param = (id,)
+            
+            cursor.execute(query,param)
+
+            session = cursor.fetchone()
+            
+            connection.commit()
+
+            return session

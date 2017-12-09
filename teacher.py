@@ -18,7 +18,6 @@ class Teacher:
         return
 
     def init_table(self):
-        #try:
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
             query = """CREATE TABLE IF NOT EXISTS teacher_table(
@@ -30,13 +29,9 @@ class Teacher:
             
             connection.commit()
             cursor.execute(query)
-<<<<<<< HEAD
     
     def insert_teacher(self, name, surname, branch, ismanager):
         
-=======
-    def add_teacher(self, name, surname, branch, ismanager):        
->>>>>>> 7821c5b139acab231b0b0ceaf061040e9c0d9be8
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
             query = """INSERT INTO teacher_table VALUES
@@ -44,7 +39,6 @@ class Teacher:
             param = (name, surname, branch ,ismanager)            
             cursor.execute(query,param)
             connection.commit()
-<<<<<<< HEAD
 
     def delete_teacher(self, id):
         
@@ -84,8 +78,25 @@ class Teacher:
 
             return id
 
+    def get_teacher(self, id):
+        
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """SELECT * FROM teacher_table WHERE
+                        (id = (%s)) """
+            param = (id,)
+            
+            cursor.execute(query,param)
 
-=======
-        return redirect(url_for('dashboard_add_teacher'))
->>>>>>> 7821c5b139acab231b0b0ceaf061040e9c0d9be8
+            teacher = cursor.fetchone()
+            
+            connection.commit()
+
+            return teacher
+
+    
+
+    
+
+
     

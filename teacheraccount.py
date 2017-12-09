@@ -62,7 +62,7 @@ class TeacherAccount:
         
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
-            query = """UPDATE teacher_table SET teacher_id = (%s), username = (%s), password = (%s)
+            query = """UPDATE teacher_account_table SET teacher_id = (%s), username = (%s), password = (%s)
                         WHERE id = (%s) """
             param = (new_teacher_id, new_username, new_password, id)
             
@@ -73,7 +73,7 @@ class TeacherAccount:
         
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
-            query = """SELECT id FROM teacher_table WHERE
+            query = """SELECT id FROM teacher_account_table WHERE
                         username = (%s) """
             param = (username)
             
@@ -84,6 +84,22 @@ class TeacherAccount:
             connection.commit()
 
             return id
+
+    def get_teacher_account(self, id):
+        
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """SELECT * FROM teacher_account_table WHERE
+                        (id = (%s)) """
+            param = (id,)
+            
+            cursor.execute(query,param)
+
+            teacher_account = cursor.fetchone()
+            
+            connection.commit()
+
+            return teacher_account
 
     
     

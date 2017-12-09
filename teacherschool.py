@@ -76,3 +76,52 @@ class TeacherSchool:
             connection.commit()
 
             return id
+
+    def get_teachers_school_id(self, teacher_id):
+
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """SELECT school_id FROM teacherschool_table WHERE
+                        (teacher_id = (%s)) """
+            param = (teacher_id,)
+            
+            cursor.execute(query,param)
+
+            id = cursor.fetchone()
+            
+            connection.commit()
+
+            return id
+
+    def get_schools_all_teachers(self, school_id):
+    
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """SELECT teacher_id FROM teacherschool_table WHERE
+                        (school_id = (%s)) """
+            param = (school_id,)
+            
+            cursor.execute(query,param)
+
+            teachers = cursor.fetchall()
+            
+            connection.commit()
+
+            return teachers
+
+    def get_teachers_all_schools(self, teacher_id):
+        
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """SELECT school_id FROM teacherschool_table WHERE
+                        (teacher_id = (%s)) """
+            param = (teacher_id,)
+            
+            cursor.execute(query,param)
+
+            schools = cursor.fetchall()
+            
+            connection.commit()
+
+            return schools
+

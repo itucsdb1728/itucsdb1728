@@ -11,28 +11,11 @@ from flask import request
 from flask import Flask
 from flask import render_template
 from school import School
-from classes import Classes
 from teacher import Teacher
 from parent import Parent
-<<<<<<< HEAD
-from teacheraccount import TeacherAccount
-from student import Student
-from classroom import Classroom
-from lesson import Lesson
-from parent import Parent
-from schedule import Schedule
-from session import Session
-from attendance import Attendance
-from grade import Grade
-from schoolclass import School_Class
-from student_class import Student_Class
-from studentparent import StudentParent
-from studentschool import StudentSchool
-from teacherschool import TeacherSchool
-=======
 from student import Student
 from studentschool import StudentSchool
-from studentclass import StudentClass
+from student_classroom import Student_Classroom
 from schoolclass import SchoolClass
 from studentparent import StudentParent
 from teacheraccount import TeacherAccount
@@ -40,7 +23,6 @@ from teacherschool import TeacherSchool
 from attendance import Attendance
 from schedule import Schedule
 from teacheraccount import TeacherAccount 
->>>>>>> 7821c5b139acab231b0b0ceaf061040e9c0d9be8
 
 app = Flask(__name__)
 
@@ -67,7 +49,6 @@ def create_db():
 
     school = School(dsn=app.config['dsn'])
     school.init_table()
-<<<<<<< HEAD
     #deneme
 
     teacher = Teacher(dsn=app.config['dsn'])
@@ -149,8 +130,8 @@ def create_db():
     #schoolclass.insert_school_class(3,8)
     #schoolclass.update_school_class(schoolclass.get_school_class_id(3,8),5,10)
 
-    student_class = Student_Class(dsn=app.config['dsn'])
-    student_class.init_table()
+    student_classroom = Student_Classroom(dsn=app.config['dsn'])
+    student_classroom.init_table()
     #student_class.insert_student_class(3,2)
     #student_class.delete_student_class(student_class.get_student_class_id(3,2))
     #student_class.insert_student_class(5,2)
@@ -178,74 +159,14 @@ def create_db():
     #teacherschool.update_teacherschool(teacherschool.get_teacherschool_id(4,10),6,12)
 
 
+    return "YAZDIKK"
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-    
-=======
-    
-    student = Student(dsn=app.config['dsn'])
-    student.init_table()
-
+@app.route('/test')
+def test():
     teacher = Teacher(dsn=app.config['dsn'])
-    teacher.init_table()
-    #teacher.insert_teacher('Hamza','Tuna','Science',True)
-
-    classes = Classes(dsn=app.config['dsn'])
-    classes.init_table()
-
-    teacher_account = TeacherAccount(dsn=app.config['dsn'])
-    teacher_account.init_table()
-    #teacher_account.insert_teacher_account('Boran','Sivrikaya','crazyboy','123456boran')
-
-    parent = Parent(dsn=app.config['dsn'])
-    parent.init_table()
-
-
-    school_class = SchoolClass(dsn=app.config['dsn'])
-    school_class.init_table()
-
-
-    teacher_school = TeacherSchool(dsn=app.config['dsn'])
-    teacher_school.init_table()
-
-    student_school = StudentSchool(dsn=app.config['dsn'])
-    student_school.init_table()
-
-    student_parent = StudentParent(dsn=app.config['dsn'])
-    student_parent.init_table()
-
-    student_class = StudentClass(dsn=app.config['dsn'])
-    student_class.init_table()
-
-    schedule = Schedule(dsn=app.config['dsn'])
-    schedule.init_table()
-
-    attendence = Attendance(dsn=app.config['dsn'])
-    attendence.init_table()
-
->>>>>>> 7821c5b139acab231b0b0ceaf061040e9c0d9be8
-    return "YAZDIKK" 
+    my_teacher = teacher.get_teacher(teacher.get_teacher_id("Yalcin","Sahin"))
+    print(my_teacher[2])
+    return "testtt"
     
 @app.route("/login",methods=["POST"])
 def login():
