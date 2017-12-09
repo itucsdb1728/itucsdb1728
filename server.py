@@ -8,6 +8,7 @@ import psycopg2 as dbapi2
 #import sys
 from flask.helpers import url_for
 from flask import request
+from flask import session
 from flask import Flask
 from flask import render_template
 from school import School
@@ -15,6 +16,7 @@ from classes import Classes
 from teacher import Teacher
 from parent import Parent
 from student import Student
+from lesson import Lesson
 from studentschool import StudentSchool
 from studentclass import StudentClass
 from schoolclass import SchoolClass
@@ -53,6 +55,9 @@ def create_db():
     
     student = Student(dsn=app.config['dsn'])
     student.init_table()
+
+    lesson = Lesson(dsn=app.config['dsn'])
+    lesson.init_table()
 
     teacher = Teacher(dsn=app.config['dsn'])
     teacher.init_table()
@@ -134,14 +139,19 @@ def dashboard_add_student():
 def dashboard_add_parent():
     return "add parent"
 
+@app.route("/selectclass")
+def select_class():
+    schedule = Schedule(dsn=app.config['dsn'])
+    classes = schedule.select_classes()
+    return render_template('sinif_ders_secimi.html',classes=classes)
 
 
-
-
-
+    return redirect(url_for('history'))
 
 if __name__ == '__main__':
     VCAP_APP_PORT = os.getenv('VCAP_APP_PORT')
+    app.secret_key = 'super_secret_key'
+    app.config['SESSION_TYPE'] = 'filesystem'
     if VCAP_APP_PORT is not None:
         port, debug = int(VCAP_APP_PORT), False
     else:

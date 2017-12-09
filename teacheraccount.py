@@ -8,6 +8,7 @@ import psycopg2 as dbapi2
 from flask import request
 from flask import render_template
 from flask import Flask
+from flask import session
 from flask import redirect
 from flask.helpers import url_for
 
@@ -56,10 +57,11 @@ class TeacherAccount:
         with dbapi2.connect(self.dsn)  as connection:
             query="SELECT * FROM teacher_account_table WHERE username='%s' AND password='%s'" %(username,password)
             cursor=connection.cursor()
-            cursor.execute(query)
-            is_exist=cursor.fetchall()
-            if is_exist is None:
+            result=cursor.execute(query)
+            if cursor.rowcount>0:
+                session['login'] = username
+                return render_template('sinif_ders_secimi.html')           
+            else:           
                 return "wrong username or password"
-            else:
-                return "WELCOME!"
+     
         
