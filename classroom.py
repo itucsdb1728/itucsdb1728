@@ -76,6 +76,22 @@ class Classroom:
             connection.commit()
 
             return id
+
+    def get_classroom(self, id):
+        
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """SELECT * FROM classroom_table WHERE
+                        (id = (%s)) """
+            param = (id,)
+            
+            cursor.execute(query,param)
+
+            classroom = cursor.fetchone()
+            
+            connection.commit()
+
+            return classroom
         
         
 

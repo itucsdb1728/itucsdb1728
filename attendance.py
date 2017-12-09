@@ -78,3 +78,53 @@ class Attendance:
             connection.commit()
 
             return id
+
+    def get_attendance(self, id):
+        
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """SELECT * FROM attendance_table WHERE
+                        (id = (%s)) """
+            param = (id,)
+            
+            cursor.execute(query,param)
+
+            attendance = cursor.fetchone()
+            
+            connection.commit()
+
+            return attendance
+
+    def get_all_attendances_for_student(self, student_id):
+        
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """SELECT * FROM attendance_table WHERE
+                        (student_id = (%s)) """
+            param = (student_id,)
+            
+            cursor.execute(query,param)
+
+            attendances = cursor.fetchall()
+            
+            connection.commit()
+
+            return attendances
+
+    def get_all_attendances_for_session(self, session_id):
+        
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """SELECT * FROM attendance_table WHERE
+                        (session_id = (%s)) """
+            param = (session_id,)
+            
+            cursor.execute(query,param)
+
+            attendances = cursor.fetchall()
+            
+            connection.commit()
+
+            return attendances
+
+    
