@@ -23,6 +23,12 @@ from teacherschool import TeacherSchool
 from attendance import Attendance
 from schedule import Schedule
 from teacheraccount import TeacherAccount 
+from classroom import Classroom
+from lesson import Lesson
+from session import Session
+from grade import Grade
+#from schoolclass import School_Class
+
 
 app = Flask(__name__)
 
