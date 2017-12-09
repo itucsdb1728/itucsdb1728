@@ -16,7 +16,7 @@ from parent import Parent
 from student import Student
 from studentschool import StudentSchool
 from student_classroom import Student_Classroom
-from schoolclass import SchoolClass
+from schoolclassroom import SchoolClassroom
 from studentparent import StudentParent
 from teacheraccount import TeacherAccount
 from teacherschool import TeacherSchool
@@ -123,8 +123,8 @@ def create_db():
     #grade.insert_grade(3,2,85,"Daha iyi")
     #grade.update_grade(grade.get_grade_id(3,2),4,4,20,"VF")
 
-    schoolclass = School_Class(dsn=app.config['dsn'])
-    schoolclass.init_table()
+    schoolclassroom = SchoolClassroom(dsn=app.config['dsn'])
+    schoolclassroom.init_table()
     #schoolclass.insert_school_class(3,8)
     #schoolclass.delete_school_class(schoolclass.get_school_class_id(3,8))
     #schoolclass.insert_school_class(3,8)

@@ -20,7 +20,6 @@ class TeacherAccount:
         return
 
     def init_table(self):
-        #try:
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
             query = """CREATE TABLE IF NOT EXISTS teacher_account_table(

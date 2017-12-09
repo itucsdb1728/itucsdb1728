@@ -108,4 +108,6 @@ class StudentSchool:
             connection.commit()
 
             return students
+
+    
     
