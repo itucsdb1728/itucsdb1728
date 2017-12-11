@@ -24,7 +24,7 @@ class Grade:
                             schedule_id INTEGER NOT NULL REFERENCES schedule_table(id) ON DELETE CASCADE ON UPDATE CASCADE,
                             student_id INTEGER NOT NULL REFERENCES student_table(id) ON DELETE CASCADE ON UPDATE CASCADE,
                             grade INTEGER NOT NULL CHECK(grade >= 0 AND grade <= 100),
-                            explanation varchar(140)
+                            explanation varchar(25) NOT NULL
                             
                             )
                             """
