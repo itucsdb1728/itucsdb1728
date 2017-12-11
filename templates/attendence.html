@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/login.css">
+    <title>Class Choice</title>
+</head>
+
+<body>
+    <form id="dersSecimi" action="/attendencerecord" method="post">
+
+        {% for name,id in zipped %} {{name}}
+        <input type="radio" checked="checked" name="{{id}}" value="1">
+        <input type="radio" name="{{id}}" value="0"> <br> {%endfor%}
+        <input type="submit">
+    </form>
+
+</body>
+
+</html>

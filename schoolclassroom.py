@@ -10,7 +10,7 @@ from flask.helpers import url_for
 
 app = Flask(__name__)
 
-class Session:
+class SchoolClassroom:
     def __init__(self,dsn):
         self.dsn = dsn
         return
@@ -19,57 +19,56 @@ class Session:
             with dbapi2.connect(self.dsn) as connection: 
 
                 cursor = connection.cursor()
-                query = """CREATE TABLE IF NOT EXISTS session_table (
+                query = """CREATE TABLE IF NOT EXISTS school_classroom_table (
                             id SERIAL PRIMARY KEY,
-                            schedule_id INTEGER NOT NULL REFERENCES schedule_table(id) ON DELETE CASCADE ON UPDATE CASCADE,
-                            session_date DATE NOT NULL,
-                            row INTEGER NOT NULL CHECK (row >= 1 AND row <= 10)
+                            classroom_id INTEGER NOT NULL REFERENCES classroom_table(id) ON DELETE CASCADE ON UPDATE CASCADE,
+                            school_id INTEGER NOT NULL REFERENCES schools_table(id) ON DELETE CASCADE ON UPDATE CASCADE
                             )
                             """
                 cursor.execute(query)
 
                 connection.commit()
 
-    def insert_session(self, schedule_id, session_date, row):
+    def insert_school_classroom(self, classroom_id, school_id):
             
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
-            query = """INSERT INTO session_table VALUES
-                        (DEFAULT,(%s),(%s),(%s)) """
-            param = (schedule_id, session_date, row)
+            query = """INSERT INTO school_classroom_table VALUES
+                        (DEFAULT,(%s),(%s)) """
+            param = (classroom_id, school_id)
             
             cursor.execute(query,param)
             connection.commit()
 
-    def delete_session(self, id):
+    def delete_school_classroom(self, id):
         
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
-            query = """DELETE FROM session_table WHERE
+            query = """DELETE FROM school_classroom_table WHERE
                         (id = (%s)) """
             param = (id)
             
             cursor.execute(query,param)
             connection.commit()
 
-    def update_session(self, id, new_schedule_id, new_session_date, new_row):
+    def update_school_classroom(self, id, new_classroom_id, new_school_id):
         
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
-            query = """UPDATE session_table SET schedule_id = (%s), session_date = (%s), row = (%s)
+            query = """UPDATE school_classroom_table SET classroom_id = (%s), school_id = (%s)
                         WHERE id = (%s) """
-            param = (new_schedule_id, new_session_date, new_row, id)
+            param = (new_classroom_id, new_school_id ,id)
             
             cursor.execute(query,param)
             connection.commit()
 
-    def get_session_id(self, schedule_id, session_date, row):
+    def get_school_classroom_id(self, classroom_id, school_id):
         
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
-            query = """SELECT id FROM session_table WHERE
-                        (schedule_id = (%s) AND session_date = (%s) AND row = (%s)) """
-            param = (schedule_id, session_date, row)
+            query = """SELECT id FROM school_classroom_table WHERE
+                        (classroom_id = (%s) AND school_id = (%s)) """
+            param = (classroom_id, school_id)
             
             cursor.execute(query,param)
 
@@ -78,35 +77,37 @@ class Session:
             connection.commit()
 
             return id
-
-    def get_session(self, id):
+    
+    def get_clasrooms_school(self, classroom_id):
         
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
-            query = """SELECT * FROM session_table WHERE
-                        (id = (%s)) """
-            param = (id,)
+            query = """SELECT school_id FROM school_classroom_table WHERE
+                        (classroom_id = (%s)) """
+            param = (classroom_id,)
             
             cursor.execute(query,param)
 
-            session = cursor.fetchone()
+            school_id = cursor.fetchone()
             
             connection.commit()
 
-            return session
-
-    def get_all_sessions_for_schedule(self, schedule_id):
+            return school_id
+        
+    def get_schools_all_classrooms(self, school_id):
         
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
-            query = """SELECT * FROM session_table WHERE
-                        (schedule_id = (%s)) """
-            param = (schedule_id,)
+            query = """SELECT classroom_id FROM school_classroom_table WHERE
+                        (school_id = (%s)) """
+            param = (school_id,)
             
             cursor.execute(query,param)
 
-            sessions = cursor.fetchall()
+            classrooms = cursor.fetchall()
             
             connection.commit()
 
-            return sessions
+            return classrooms
+        
+

@@ -8,22 +8,16 @@
 </head>
 
 <body>
-    <form id="dersSecimi" action="YoklamaGirisi.php" method="post">
+    <form id="dersSecimi" action="/attendencelist" method="post">
         <div class="box-body">
             <div class=row>
                 <div class="form-group col-md-6">
                     <label>Sınıf Seçiniz</label>
                     <select class="form-control select2" name="sinif" style="width: 100%;">
                   <option selected="selected">Sınıf</option>
-                  <option value="2">2.DERS</option>
-                  <option value="3">3.DERS</option>
-                  <option value="4">4.DERS</option>
-                  <option value="5">5.DERS</option>
-                  <option value="6">6.DERS</option>
-                  <option value="7">7.DERS</option>
-                  <option value="8">8.DERS</option>
-                  <option value="9">9.DERS</option>
-
+                  {% for name in classes %}
+                    <option value="{{ name }}">{{name}}</option>
+                  {% endfor %}
                 </select>
                 </div>
 
