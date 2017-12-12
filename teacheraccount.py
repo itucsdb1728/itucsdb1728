@@ -8,6 +8,7 @@ import psycopg2 as dbapi2
 from flask import request
 from flask import render_template
 from flask import Flask
+from flask import session
 from flask import redirect
 from flask.helpers import url_for
 from teacher import Teacher
@@ -106,12 +107,14 @@ class TeacherAccount:
 
     def login_check(self,username,password):
         with dbapi2.connect(self.dsn)  as connection:
-            query="SELECT * FROM teacher_account_table WHERE username='%s' AND password='%s'" %(username,password)
+            query="SELECT teacher_id FROM teacher_account_table WHERE username='%s' AND password='%s'" %(username,password)
             cursor=connection.cursor()
-            cursor.execute(query)
-            is_exist=cursor.fetchall()
-            if is_exist is None:
+            result=cursor.execute(query)
+            teacher_id = cursor.fetchone()
+            if cursor.rowcount>0:
+                session['login'] = teacher_id
+                return redirect(url_for('select_class'))
+            else:           
                 return "wrong username or password"
-            else:
-                return "WELCOME!"
+     
         

@@ -95,4 +95,59 @@ class Student:
             connection.commit()
 
             return student
-        
+
+
+
+    def get_all_student_of_class(self,sinif):
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query="""SELECT name,surname FROM student_table WHERE id IN (SELECT student_id FROM student_class_table WHERE class_id IN (SELECT id from class_table WHERE name IN (%s)))"""
+   
+            
+            param=(sinif,)
+            
+            cursor.execute(query,param)
+            data = cursor.fetchall()
+
+            dataList=[]
+
+            for a in data:
+                dataList.append(a[0])
+
+            return dataList     
+
+
+    def get_all_student_names_of_class(self,ids):
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query="""SELECT name FROM student_table WHERE id=(%s)"""
+            
+            param=(ids)
+            
+            cursor.execute(query,param)
+            data = cursor.fetchall()
+
+            dataList=[]
+
+            for a in data:
+                dataList.append(a[0])
+            return dataList            
+
+    def get_all_student_surnames_of_class(self,ids):
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query="""SELECT surname FROM student_table WHERE id=(%s)"""
+            
+            param=(ids)
+            
+            cursor.execute(query,param)
+            data = cursor.fetchall()
+
+            dataList=[]
+
+            for a in data:
+                dataList.append(a[0])
+            return dataList
+
+
+

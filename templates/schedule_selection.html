@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/login.css">
+    <title>Class Choice</title>
+</head>
+
+<body>
+    <form id="schedule_selection" action="/gradelist" method="post">
+        <div class="box-body">
+            <div class=row>
+                <div class="form-group col-md-6">
+                    <label>Sınıf Seçiniz</label>
+                    <select class="form-control select2" name="schedule" style="width: 100%;">
+                  <option selected="selected">Ders</option>
+                  {% for id,class,lesson in zipped %} {{name}}
+                    <option value="{{ id }}">{{ class }} - {{ lesson }}</option>
+                  {% endfor %}
+                </select>
+                </div>
+
+                <div class="form-group com-md-6">
+                    <center><button type="submit" class="btn btn-primary btn-lg"><strong>Derse giris yap</strong></button></center>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</body>
+
+</html>

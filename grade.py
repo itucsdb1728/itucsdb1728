@@ -25,7 +25,7 @@ class Grade:
                             student_id INTEGER NOT NULL REFERENCES student_table(id) ON DELETE CASCADE ON UPDATE CASCADE,
                             grade INTEGER NOT NULL CHECK(grade >= 0 AND grade <= 100),
                             explanation varchar(25) NOT NULL
-                            
+                            UNIQUE (schedule_id,explanation)
                             )
                             """
                 cursor.execute(query)
