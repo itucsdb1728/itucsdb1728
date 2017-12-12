@@ -322,9 +322,29 @@ def graderecord():
         grade.insert_grade(schedule_id,id[0],my_grade,explanation)
     return "basarili!!!"
 
+@app.route("/listgrades",methods=["GET","POST"])
+def listgrades():
+    studentclass = Student_Class(dsn=app.config['dsn'])
+    schedule = Schedule(dsn=app.config['dsn'])
+    student = Student(dsn=app.config['dsn'])
+    grade = Grade(dsn=app.config['dsn'])
+    schedule_id = session['schedule_id']
+    my_schedule = schedule.get_schedule(schedule_id)
+    grades = grade.get_all_grades_for_schedule(schedule_id)
+    names=[]
+    surnames=[]
+    gradepoints=[]
+    explanations=[]
+    for g in grades:
+        my_student = student.get_student(g[2])
+        names.append(my_student[1])
+        surnames.append(my_student[2])
+        gradepoints.append(g[3])
+        explanations.append(g[4])
 
+    return render_template('gradelist.html',zipped = zip(names,surnames,gradepoints,explanations))
 
-
+    
 @app.route("/gecici",methods=["GET","POST"])
 def gecici():
     session = Session(dsn=app.config['dsn'])
