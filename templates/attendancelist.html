@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/login.css">
+    <title>Class Choice</title>
+</head>
+
+<body>
+   
+        {% for name,surname,date,row,situation in zipped %}
+        {{name}} {{surname}} {{date}} {{row}} {{situation}} <br>
+        {%endfor%}
+        
+        
+    </form>
+
+</body>
+
+</html>

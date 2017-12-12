@@ -8,6 +8,16 @@
 </head>
 
 <body>
+
+        <form id="listattendances" action="/listattendances" method="post">
+            List all attendances you taken.
+            <input type="submit">
+        </form>
+
+        <form id="updateattendances" action="/updateattendances" method="post">
+            Update attendances.
+            <input type="submit">
+        </form>
     <form id="dersSecimi" action="/attendancerecord" method="post">
 
         {% for name,id in zipped %} {{name}}

@@ -16,7 +16,6 @@ from grade import Grade
 from session import Session
 from parent import Parent
 from student import Student
-from lesson import Lesson
 from studentschool import StudentSchool
 from student_class import Student_Class
 from schoolclass import SchoolClass
@@ -44,7 +43,7 @@ class Attendance:
                             attendance_date DATE NOT NULL,
                             row INTEGER NOT NULL CHECK (row >= 1 AND row <= 10),
                             situation BOOLEAN NOT NULL,
-                            UNIQUE (teacher_id,attendance_date,row)
+                            UNIQUE (teacher_id,attendance_date,row,student_id)
                             )"""
                 cursor.execute(query)
 
@@ -56,10 +55,11 @@ class Attendance:
         now = datetime.datetime.now()
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
+            row = session['derssaat']
             for id in ids:
                 attendance_situation = request.form[str(id)]
-                query = """INSERT INTO attendance_table VALUES (DEFAULT,(%s),(%s),(%s),(%s))"""
-                param=(id,teacher_id,now,attendance_situation)
+                query = """INSERT INTO attendance_table VALUES (DEFAULT,(%s),(%s),(%s),(%s),(%s))"""
+                param=(id,teacher_id,now,row,attendance_situation)
                 cursor.execute(query,param)
             connection.commit()
         return "yoklama kaydedildi"
@@ -70,18 +70,18 @@ class Attendance:
             cursor = connection.cursor()
             query = """DELETE FROM attendance_table WHERE
                         (id = (%s)) """
-            param = (id)
+            param = (id,)
             
             cursor.execute(query,param)
             connection.commit()
 
-    def update_attendance(self, id, new_student_id, new_session_id, new_situation):
+    def update_attendance(self, id, new_student_id, new_situation):
         
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
-            query = """UPDATE attendance_table SET student_id = (%s), session_id = (%s), situation = (%s)
+            query = """UPDATE attendance_table SET student_id = (%s), situation = (%s)
                         WHERE id = (%s) """
-            param = (new_student_id, new_session_id, new_situation ,id)
+            param = (new_student_id, new_situation ,id)
             
             cursor.execute(query,param)
             connection.commit()
@@ -101,6 +101,40 @@ class Attendance:
             connection.commit()
 
             return id
+
+    def get_all_attendances_for_teacher(self, teacher_id):
+        
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+
+            query = """SELECT * FROM attendance_table WHERE
+                        (teacher_id = (%s)) """
+            param = (teacher_id)
+            
+            cursor.execute(query,param)
+
+            teachers = cursor.fetchall()
+            
+            connection.commit()
+
+            return teachers
+
+    def get_attendance(self, id):
+        
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """SELECT * FROM attendance_table WHERE
+                        (id = (%s)) """
+            param = (id,)
+            
+            cursor.execute(query,param)
+
+            attendancem = cursor.fetchone()
+            
+            connection.commit()
+
+            return attendancem
+        
 
 
 

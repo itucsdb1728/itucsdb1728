@@ -24,7 +24,6 @@ from studentschool import StudentSchool
 from student_class import Student_Class
 from schoolclass import SchoolClass
 from studentparent import StudentParent
-from teacheraccount import TeacherAccount
 from teacherschool import TeacherSchool
 from schedule import Schedule
 from teacheraccount import TeacherAccount 
@@ -261,14 +260,72 @@ def attendance():
         student = Student(dsn=app.config['dsn'])
         #attendance = Attendance(dsn=app.config['dsn']) 
         sinif=request.form['sinif']
-        derssaat = request.form['derssaati']
+        row = request.form['derssaati']
         session['sinif'] = sinif
-        session['derssaat'] = derssaat
+        session['derssaat'] = row
         ids = studentclass.get_id_all_students(sinif)
         names = student.get_all_student_of_class(sinif)
         return render_template('attendance.html',zipped = zip(names,ids))
     else:
         return redirect(url_for('home_page'))
+
+@app.route("/listattendances",methods=["GET","POST"])
+def listattendances():
+    attendance = Attendance(dsn=app.config['dsn'])
+    student = Student(dsn=app.config['dsn'])
+    teacher_id = session['login']
+    attendances = attendance.get_all_attendances_for_teacher(teacher_id)
+    names=[]
+    surnames=[]
+    dates=[]
+    rows=[]
+    situations=[]
+    for a in attendances:
+        my_student = student.get_student(a[1])
+        names.append(my_student[1])
+        surnames.append(my_student[2])
+        dates.append(a[3])
+        rows.append(a[4])
+        situations.append(a[5])
+    return render_template('attendancelist.html',zipped = zip(names,surnames,dates,rows,situations))
+
+@app.route("/updateattendances",methods=["GET","POST"])
+def updateattendances():
+    attendance = Attendance(dsn=app.config['dsn'])
+    student = Student(dsn=app.config['dsn'])
+    teacher_id = session['login']
+    attendances = attendance.get_all_attendances_for_teacher(teacher_id)
+    ids=[]
+    names=[]
+    surnames=[]
+    dates=[]
+    rows=[]
+    situations=[]
+    for a in attendances:
+        ids.append(a[0])
+        my_student = student.get_student(a[1])
+        names.append(my_student[1])
+        surnames.append(my_student[2])
+        dates.append(a[3])
+        rows.append(a[4])
+        situations.append(a[5])
+    
+    return render_template('updateattendances.html',zipped = zip(ids,names,surnames,dates,rows,situations))
+
+@app.route("/updateattendancecontroller",methods=["GET","POST"])
+def updateattendancecontroller():
+    attendance = Attendance(dsn=app.config['dsn'])
+    attendance_id = request.form['attendance']
+    operation = request.form['updateordelete']
+    if str(operation) == 'update':
+        new_situation = request.form['attendancecontrol']
+        my_attendance = attendance.get_attendance(attendance_id)
+        attendance.update_attendance(attendance_id,my_attendance[1],new_situation)
+        return "Guncelleme basarili"
+    else:
+        attendance.delete_attendance(attendance_id)
+        return "Silme basarili"
+    
 
 @app.route("/attendancerecord",methods=["GET","POST"])
 def attendancerecord():
