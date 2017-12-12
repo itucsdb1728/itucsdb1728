@@ -10,7 +10,7 @@ from flask.helpers import url_for
 
 app = Flask(__name__)
 
-class Classroom:
+class Class:
     def __init__(self,dsn):
         self.dsn = dsn
         return
@@ -28,18 +28,18 @@ class Classroom:
                 cursor.execute(query)
                 connection.commit()
                 
-    def insert_classroom(self, classroom_name, year):
+    def insert_class(self, class_name, year):
             
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
             query = """INSERT INTO class_table VALUES
                         (DEFAULT,(%s),(%s)) """
-            param = (classroom_name, year)
+            param = (class_name, year)
             
             cursor.execute(query,param)
             connection.commit()
 
-    def delete_classroom(self, id):
+    def delete_class(self, id):
         
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
@@ -50,24 +50,24 @@ class Classroom:
             cursor.execute(query,param)
             connection.commit()
 
-    def update_classroom(self, id, new_classroom_name, new_year):
+    def update_class(self, id, new_class_name, new_year):
         
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
             query = """UPDATE class_table SET name = (%s), year = (%s)
                         WHERE id = (%s) """
-            param = (new_classroom_name, new_year, id)
+            param = (new_class_name, new_year, id)
             
             cursor.execute(query,param)
             connection.commit()
 
-    def get_classroom_id(self, classroom_name):
+    def get_class_id(self, class_name):
         
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
             query = """SELECT id FROM class_table WHERE
                         (name = (%s)) """
-            param = (classroom_name,)
+            param = (class_name,)
             
             cursor.execute(query,param)
 
@@ -78,6 +78,22 @@ class Classroom:
             for a in data:
                 dataList.append(a[0])
             return dataList
+
+    def get_class(self, id):
+        
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """SELECT * FROM class_table WHERE
+                        (id = (%s)) """
+            param = (id,)
+            
+            cursor.execute(query,param)
+
+            classroom = cursor.fetchone()
+            
+            connection.commit()
+
+            return classroom
         
         
 

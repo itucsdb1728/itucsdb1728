@@ -76,6 +76,22 @@ class Lesson:
             connection.commit()
 
             return id
+
+    def get_lesson(self, id):
+        
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """SELECT * FROM lesson_table WHERE
+                        (id = (%s)) """
+            param = (id,)
+            
+            cursor.execute(query,param)
+
+            lesson = cursor.fetchone()
+            
+            connection.commit()
+
+            return lesson
         
         
         with dbapi2.connect(self.dsn) as connection:

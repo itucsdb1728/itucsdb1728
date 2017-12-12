@@ -21,7 +21,7 @@ class Schedule:
                 cursor = connection.cursor()
                 query = """CREATE TABLE IF NOT EXISTS schedule_table (
                             id SERIAL PRIMARY KEY ,
-                            classroom_id INTEGER NOT NULL REFERENCES classroom_table(id) ON DELETE CASCADE ON UPDATE CASCADE,
+                            class_id INTEGER NOT NULL REFERENCES class_table(id) ON DELETE CASCADE ON UPDATE CASCADE,
                             lesson_id INTEGER NOT NULL REFERENCES lesson_table(id) ON DELETE CASCADE ON UPDATE CASCADE,
                             teacher_id INTEGER NOT NULL REFERENCES teacher_table(id) ON DELETE CASCADE ON UPDATE CASCADE,
                             year INTEGER NOT NULL CHECK (year >= 2012 AND year<=2053)
@@ -31,13 +31,13 @@ class Schedule:
 
                 connection.commit()
     
-    def insert_schedule(self, classroom_id, lesson_id, teacher_id, year):
+    def insert_schedule(self, class_id, lesson_id, teacher_id, year):
             
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
             query = """INSERT INTO schedule_table VALUES
                         (DEFAULT,(%s),(%s),(%s),(%s)) """
-            param = (classroom_id, lesson_id, teacher_id, year)
+            param = (class_id, lesson_id, teacher_id, year)
             
             cursor.execute(query,param)
             connection.commit()
@@ -53,24 +53,24 @@ class Schedule:
             cursor.execute(query,param)
             connection.commit()
 
-    def update_schedule(self, id, new_classroom_id, new_lesson_id, new_teacher_id, new_year):
+    def update_schedule(self, id, new_class_id, new_lesson_id, new_teacher_id, new_year):
         
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
-            query = """UPDATE schedule_table SET classroom_id = (%s), lesson_id = (%s), teacher_id = (%s), year = (%s)
+            query = """UPDATE schedule_table SET class_id = (%s), lesson_id = (%s), teacher_id = (%s), year = (%s)
                         WHERE id = (%s) """
-            param = (new_classroom_id, new_lesson_id, new_teacher_id, new_year, id)
+            param = (new_class_id, new_lesson_id, new_teacher_id, new_year, id)
             
             cursor.execute(query,param)
             connection.commit()
 
-    def get_schedule_id(self, classroom_id, lesson_id):
+    def get_schedule_id(self, class_id, lesson_id):
         
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
             query = """SELECT id FROM schedule_table WHERE
-                        (classroom_id = (%s) AND lesson_id = (%s)) """
-            param = (classroom_id, lesson_id)
+                        (class_id = (%s) AND lesson_id = (%s)) """
+            param = (class_id, lesson_id)
             
             cursor.execute(query,param)
 
@@ -100,25 +100,23 @@ class Schedule:
 
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
-            query = """SELECT id FROM schedule_table WHERE
+            query = """SELECT * FROM schedule_table WHERE
                         (teacher_id = (%s)) """
             param = (teacher_id,)
             
             cursor.execute(query,param)
 
             schedules = cursor.fetchall()
-            
-            connection.commit()
 
             return schedules
 
-    def get_all_schedules_for_classroom(self, classroom_id):
+    def get_all_schedules_for_class(self, class_id):
 
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
             query = """SELECT id FROM schedule_table WHERE
-                        (classroom_id = (%s)) """
-            param = (classroom_id,)
+                        (class_id = (%s)) """
+            param = (class_id,)
             
             cursor.execute(query,param)
 

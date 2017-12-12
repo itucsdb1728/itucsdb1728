@@ -12,7 +12,6 @@ from flask import session
 from flask import Flask
 from flask import render_template
 from attendance import Attendance
-from classroom import Classroom
 from school import School
 from teacher import Teacher
 from grade import Grade
@@ -21,13 +20,19 @@ from parent import Parent
 from student import Student
 from lesson import Lesson
 from studentschool import StudentSchool
-from student_classroom import Student_Classroom
-from schoolclassroom import SchoolClassroom
+from student_class import Student_Class
+from schoolclass import SchoolClass
 from studentparent import StudentParent
 from teacheraccount import TeacherAccount
 from teacherschool import TeacherSchool
 from schedule import Schedule
 from teacheraccount import TeacherAccount 
+from classroom import Class
+from lesson import Lesson
+from session import Session
+from grade import Grade
+#from schoolclass import School_Class
+
 
 app = Flask(__name__)
 
@@ -82,12 +87,12 @@ def create_db():
     #school.insert_school("GOP")
     #school.update_school(school.get_school_id("GOP"),"IAFL")
 
-    classroom = Classroom(dsn=app.config['dsn'])
+    classroom = Class(dsn=app.config['dsn'])
     classroom.init_table()
-    #classroom.insert_classroom("9A",2013)
-    #classroom.delete_classroom(classroom.get_classroom_id("9A",2013))
-    #classroom.insert_classroom("10A",2013)
-    #classroom.update_classroom(classroom.get_classroom_id("10A",2013),"12C",2015)
+    #class.insert_class("9A",2013)
+    #class.delete_class(class.get_class_id("9A",2013))
+    #class.insert_class("10A",2013)
+    #class.update_class(class.get_class_id("10A",2013),"12C",2015)
 
     lesson = Lesson(dsn=app.config['dsn'])
     lesson.init_table()
@@ -131,15 +136,15 @@ def create_db():
     #grade.insert_grade(3,2,85,"Daha iyi")
     #grade.update_grade(grade.get_grade_id(3,2),4,4,20,"VF")
 
-    schoolclassroom = SchoolClassroom(dsn=app.config['dsn'])
-    schoolclassroom.init_table()
+    schoolclass = SchoolClass(dsn=app.config['dsn'])
+    schoolclass.init_table()
     #schoolclass.insert_school_class(3,8)
     #schoolclass.delete_school_class(schoolclass.get_school_class_id(3,8))
     #schoolclass.insert_school_class(3,8)
     #schoolclass.update_school_class(schoolclass.get_school_class_id(3,8),5,10)
 
-    student_classroom = Student_Classroom(dsn=app.config['dsn'])
-    student_classroom.init_table()
+    student_class = Student_Class(dsn=app.config['dsn'])
+    student_class.init_table()
     #student_class.insert_student_class(3,2)
     #student_class.delete_student_class(student_class.get_student_class_id(3,2))
     #student_class.insert_student_class(5,2)
@@ -224,25 +229,45 @@ def select_class():
     classes = schedule.get_all_classes(teacher_id)
     return render_template('sinif_ders_secimi.html',classes=classes)
 
+@app.route("/selectschedule")
+def selectschedule():
+    schedule = Schedule(dsn=app.config['dsn'])
+    classroom = Class(dsn=app.config['dsn'])
+    lesson = Lesson(dsn=app.config['dsn'])
+    teacher_id = session['login']
+    schedules = schedule.get_all_schedules_for_teacher(teacher_id)
+    schedule_ids=[]
+    class_names=[]
+    lesson_names=[]
+    for a in schedules:
+        schedule_ids.append(a[0])
+        my_classroom = classroom.get_class(a[1])
+        class_names.append(my_classroom[1])
+        my_lesson = lesson.get_lesson(a[2])
+        lesson_names.append(my_lesson[1])
+        
+        
+    return render_template('schedule_selection.html',zipped = zip(schedule_ids,lesson_names,class_names))
+
 
 @app.route("/attendancelist",methods=["GET","POST"])
 def attendance():
-    studentclassroom = Student_Classroom(dsn=app.config['dsn'])
+    studentclass = Student_Class(dsn=app.config['dsn'])
     schedule = Schedule(dsn=app.config['dsn'])
-    classroom = Classroom(dsn=app.config['dsn'])
+    classroom = Class(dsn=app.config['dsn'])
     student = Student(dsn=app.config['dsn'])
     #attendance = Attendance(dsn=app.config['dsn']) 
     sinif=request.form['sinif']
     derssaat = request.form['derssaati']
     session['sinif'] = sinif
     session['derssaat'] = derssaat
-    ids = studentclassroom.get_id_all_students(sinif)
+    ids = studentclass.get_id_all_students(sinif)
     names = student.get_all_student_of_class(sinif)
     return render_template('attendance.html',zipped = zip(names,ids))
 
 @app.route("/attendancerecord",methods=["GET","POST"])
 def attendancerecord():
-    studentclassroom = Student_Classroom(dsn=app.config['dsn'])
+    studentclassroom = Student_Class(dsn=app.config['dsn'])
     attendance = Attendance(dsn=app.config['dsn'])
     sinif=session['sinif']
     teacher_id = session['login']
@@ -254,6 +279,48 @@ def attendancerecord():
     #print(ids)
     stringvalue=attendance.insert_attendance(ids,sinif)
     return stringvalue
+
+@app.route("/gradelist",methods=["GET","POST"])
+def gradelist():
+    studentclass = Student_Class(dsn=app.config['dsn'])
+    schedule = Schedule(dsn=app.config['dsn'])
+    student = Student(dsn=app.config['dsn']) 
+    schedule_id=request.form['schedule']
+    session['schedule_id'] = schedule_id
+    my_schedule = schedule.get_schedule(schedule_id)
+    class_id = my_schedule[1]
+    students = studentclass.get_classs_all_students(class_id)
+    student_ids=[]
+    names=[]
+    surnames=[]
+    for a in students:
+        student_ids.append(a[0])
+        my_student = student.get_student(a[0])
+        names.append(my_student[1])
+        surnames.append(my_student[2])
+        
+    print("Student ids: ",student_ids)
+    print("Names: ",names)
+    print("Surnames: ",surnames)
+    return render_template('grade.html',zipped = zip(student_ids,names,surnames))
+
+
+@app.route("/graderecord",methods=["GET","POST"])
+def graderecord():
+    studentclass = Student_Class(dsn=app.config['dsn'])
+    schedule = Schedule(dsn=app.config['dsn'])
+    grade = Grade(dsn=app.config['dsn'])
+    explanation = request.form['aciklama']
+    schedule_id = session['schedule_id']
+    my_schedule = schedule.get_schedule(schedule_id)
+    class_id = my_schedule[1]
+    students = studentclass.get_classs_all_students(class_id)
+    for id in students:
+        my_grade = request.form[str(id[0])]
+        grade.insert_grade(schedule_id,id[0],my_grade,explanation)
+    return "basarili!!!"
+
+
 
 
 @app.route("/gecici",methods=["GET","POST"])

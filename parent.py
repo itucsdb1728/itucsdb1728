@@ -80,3 +80,19 @@ class Parent:
             connection.commit()
 
             return id
+
+    def get_parent(self, id):
+        
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """SELECT * FROM parent_table WHERE
+                        (id = (%s)) """
+            param = (id,)
+            
+            cursor.execute(query,param)
+
+            parent = cursor.fetchone()
+            
+            connection.commit()
+
+            return parent

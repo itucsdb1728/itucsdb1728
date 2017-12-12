@@ -9,7 +9,7 @@ from flask import request
 from flask import redirect
 from flask import session
 from flask.helpers import url_for
-from classroom import Classroom
+from classroom import Class
 from school import School
 from teacher import Teacher
 from grade import Grade
@@ -18,8 +18,8 @@ from parent import Parent
 from student import Student
 from lesson import Lesson
 from studentschool import StudentSchool
-from student_classroom import Student_Classroom
-from schoolclassroom import SchoolClassroom
+from student_class import Student_Class
+from schoolclass import SchoolClass
 from studentparent import StudentParent
 from teacheraccount import TeacherAccount
 from teacherschool import TeacherSchool

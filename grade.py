@@ -24,8 +24,8 @@ class Grade:
                             schedule_id INTEGER NOT NULL REFERENCES schedule_table(id) ON DELETE CASCADE ON UPDATE CASCADE,
                             student_id INTEGER NOT NULL REFERENCES student_table(id) ON DELETE CASCADE ON UPDATE CASCADE,
                             grade INTEGER NOT NULL CHECK(grade >= 0 AND grade <= 100),
-                            explanation varchar(140)
-                            
+                            explanation varchar(25) NOT NULL
+                            UNIQUE (schedule_id,explanation)
                             )
                             """
                 cursor.execute(query)
@@ -65,13 +65,13 @@ class Grade:
             cursor.execute(query,param)
             connection.commit()
 
-    def get_grade_id(self, schedule_id, student_id):
+    def get_grade_id(self, schedule_id, student_id, explanation):
         
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
             query = """SELECT id FROM grade_table WHERE
-                        (schedule_id = (%s) AND student_id = (%s)) """
-            param = (schedule_id, student_id)
+                        (schedule_id = (%s) AND student_id = (%s) AND explanation = (%s)) """
+            param = (schedule_id, student_id, explanation)
             
             cursor.execute(query,param)
 
@@ -80,4 +80,52 @@ class Grade:
             connection.commit()
 
             return id
+
+    def get_grade(self, id):
+        
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """SELECT * FROM grade_table WHERE
+                        (id = (%s)) """
+            param = (id,)
+            
+            cursor.execute(query,param)
+
+            grade = cursor.fetchone()
+            
+            connection.commit()
+
+            return grade
+
+    def get_all_grades_for_student(self, student_id):
+    
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """SELECT id FROM schedule_table WHERE
+                        (student_id = (%s)) """
+            param = (student_id,)
+            
+            cursor.execute(query,param)
+
+            schedules = cursor.fetchall()
+            
+            connection.commit()
+
+            return schedules
+
+    def get_all_grades_for_schedule(self, schedule_id):
+
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """SELECT id FROM schedule_table WHERE
+                        (schedule_id = (%s)) """
+            param = (schedule_id,)
+            
+            cursor.execute(query,param)
+
+            schedules = cursor.fetchall()
+            
+            connection.commit()
+
+            return schedules
         
