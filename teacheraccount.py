@@ -113,8 +113,9 @@ class TeacherAccount:
             teacher_id = cursor.fetchone()
             if cursor.rowcount>0:
                 session['login'] = teacher_id
-                return redirect(url_for('select_class'))
+                #return redirect(url_for('select_class'))
+                return "1"
             else:           
-                return "wrong username or password"
+                return "0"
      
         

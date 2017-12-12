@@ -1,0 +1,40 @@
+<html>
+
+<head>
+    <title>
+        Login
+    </title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='login.css') }}">
+</head>
+
+<body>
+
+    <!--
+        you can substitue the span of reauth email for a input with the email and
+        include the remember me checkbox
+        -->
+    <div class="container">
+        <a href="{{ url_for('select_class') }}">
+            <div class="choice col-lg-3 col-lg-offset-2 card-container">
+                Yoklama almak için tıklayınız
+            </div>
+        </a>
+
+
+        <a href="{{ url_for('selectschedule') }}">
+            <div class="choice col-lg-3 col-lg-offset-2 card-container">
+                Not girişi yapmak için tıklayınız
+            </div>
+        </a>
+
+        <!-- /card-container -->
+    </div>
+
+    <!-- /container -->
+
+</body>
+
+</body>
+
+</html>
