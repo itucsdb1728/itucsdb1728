@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/login.css">
+    <title>Class Choice</title>
+</head>
+
+<body>
+    <form id="gradeupdater" action="/updategradecontroller" method="post">
+        <div class="box-body">
+            <div class=row>
+                <div class="form-group col-md-6">
+                    <label>Not Seciniz</label>
+                    <select class="form-control select2" name="grade" style="width: 100%;">
+                  <option selected="selected">Not</option>
+                  {% for id,name,surname,grade,explanation in zipped %}
+                    <option value="{{ id }}">{{name}} {{surname}} {{grade}} {{explanation}}</option>
+                  {% endfor %}
+                </select>
+                </div>
+                Update <input type="radio" checked="checked" name="updateordelete" value="update">
+                Delete <input type="radio" name="updateordelete" value="delete">
+                <div class="form-group com-md-6">
+                    <center><button type="submit" class="btn btn-primary btn-lg"><strong>İslemi gerceklestir</strong></button></center>
+                </div>
+                <input type="text" placeholder="New Grade" name="new_grade"> <br>
+                <input type="text" placeholder="New Explanation" name="new_explanation"> <br>
+            </div>
+        </div>
+    </form>
+
+</body>
+
+</html>

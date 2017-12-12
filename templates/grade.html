@@ -8,6 +8,16 @@
 </head>
 
 <body>
+        <form id="listgrades" action="/listgrades" method="post">
+            List all grades for this schedule.
+            <input type="submit">
+        </form>
+
+        <form id="updategrades" action="/updategrades" method="post">
+            Update grades.
+            <input type="submit">
+        </form>
+
     <form id="graderecord" action="/graderecord" method="post">
         <input type="text" name="aciklama" placeholder="Sınav Açıklaması"> <br>
         {% for id,name,surname in zipped %}

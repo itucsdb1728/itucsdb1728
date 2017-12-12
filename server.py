@@ -299,9 +299,6 @@ def gradelist():
         names.append(my_student[1])
         surnames.append(my_student[2])
         
-    print("Student ids: ",student_ids)
-    print("Names: ",names)
-    print("Surnames: ",surnames)
     return render_template('grade.html',zipped = zip(student_ids,names,surnames))
 
 
@@ -342,6 +339,44 @@ def listgrades():
 
     return render_template('gradelist.html',zipped = zip(names,surnames,gradepoints,explanations))
 
+@app.route("/updategrades",methods=["GET","POST"])
+def updategrades():
+    studentclass = Student_Class(dsn=app.config['dsn'])
+    schedule = Schedule(dsn=app.config['dsn'])
+    student = Student(dsn=app.config['dsn'])
+    grade = Grade(dsn=app.config['dsn'])
+    schedule_id = session['schedule_id']
+    my_schedule = schedule.get_schedule(schedule_id)
+    grades = grade.get_all_grades_for_schedule(schedule_id)
+    ids=[]
+    names=[]
+    surnames=[]
+    gradepoints=[]
+    explanations=[]
+    for g in grades:
+        ids.append(g[0])
+        my_student = student.get_student(g[2])
+        names.append(my_student[1])
+        surnames.append(my_student[2])
+        gradepoints.append(g[3])
+        explanations.append(g[4])
+
+    return render_template('updategrade.html',zipped = zip(ids,names,surnames,gradepoints,explanations))
+
+@app.route("/updategradecontroller",methods=["GET","POST"])
+def updategradecontroller():
+    grade = Grade(dsn=app.config['dsn'])
+    grade_id = request.form['grade']
+    operation = request.form['updateordelete']
+    if str(operation) == 'update':
+        new_explanation = request.form['new_explanation']
+        new_grade = request.form['new_grade']
+        my_grade = grade.get_grade(grade_id)
+        grade.update_grade(grade_id,my_grade[1],my_grade[2],new_grade,new_explanation)
+        return "Guncelleme basarili"
+    else:
+        grade.delete_grade(grade_id)
+        return "Silme basarili"
     
 @app.route("/gecici",methods=["GET","POST"])
 def gecici():

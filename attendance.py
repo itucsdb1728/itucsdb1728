@@ -42,7 +42,9 @@ class Attendance:
                             student_id INTEGER NOT NULL REFERENCES student_table(id) ON DELETE CASCADE ON UPDATE CASCADE,
                             teacher_id INTEGER NOT NULL REFERENCES teacher_table(id) ON DELETE CASCADE ON UPDATE CASCADE,
                             attendance_date DATE NOT NULL,
-                            situation BOOLEAN NOT NULL
+                            row INTEGER NOT NULL CHECK (row >= 1 AND row <= 10),
+                            situation BOOLEAN NOT NULL,
+                            UNIQUE (teacher_id,attendance_date,row)
                             )"""
                 cursor.execute(query)
 
