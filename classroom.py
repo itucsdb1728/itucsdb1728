@@ -79,6 +79,20 @@ class Class:
                 dataList.append(a[0])
             return dataList
 
+
+    def get_class_id_tuple(self, class_name):       
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """SELECT id FROM class_table WHERE
+                        (name = (%s)) """
+            param = (class_name,)
+            
+            cursor.execute(query,param)
+
+            data = cursor.fetchall()
+            connection.commit()
+            return data
+
     def get_class(self, id):
         
         with dbapi2.connect(self.dsn) as connection:
