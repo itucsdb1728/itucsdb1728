@@ -128,3 +128,18 @@ class Student_Class:
             return dataList
 
 
+    def get_tuple_id_all_students(self, classroom_name):
+        
+        with dbapi2.connect(self.dsn) as connection:
+            cursor = connection.cursor()
+            query = """SELECT student_id FROM student_class_table WHERE
+                        class_id IN (SELECT id FROM class_table WHERE name =(%s)) """
+            param = (classroom_name,)
+            
+            cursor.execute(query,param)
+
+            data = cursor.fetchall()
+
+            return data
+
+

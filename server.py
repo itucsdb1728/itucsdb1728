@@ -250,8 +250,8 @@ def selectschedule():
     return render_template('schedule_selection.html',zipped = zip(schedule_ids,lesson_names,class_names))
 
 
-@app.route("/attendencelist",methods=["GET","POST"])
-def attendence():
+@app.route("/attendancelist",methods=["GET","POST"])
+def attendance():
     studentclass = Student_Class(dsn=app.config['dsn'])
     schedule = Schedule(dsn=app.config['dsn'])
     classroom = Class(dsn=app.config['dsn'])
@@ -263,7 +263,22 @@ def attendence():
     session['derssaat'] = derssaat
     ids = studentclass.get_id_all_students(sinif)
     names = student.get_all_student_of_class(sinif)
-    return render_template('attendence.html',zipped = zip(names,ids))
+    return render_template('attendance.html',zipped = zip(names,ids))
+
+@app.route("/attendancerecord",methods=["GET","POST"])
+def attendancerecord():
+    studentclassroom = Student_Class(dsn=app.config['dsn'])
+    attendance = Attendance(dsn=app.config['dsn'])
+    sinif=session['sinif']
+    teacher_id = session['login']
+    ids = []
+    #ids.append(studentclassroom.get_id_all_students(sinif))
+    ids=studentclassroom.get_id_all_students(sinif)
+    #ids=studentclassroom.get_tuple_id_all_students(sinif)
+    #tuple_ids = tuple(ids)
+    #print(ids)
+    stringvalue=attendance.insert_attendance(ids,sinif)
+    return stringvalue
 
 @app.route("/gradelist",methods=["GET","POST"])
 def gradelist():
@@ -289,23 +304,6 @@ def gradelist():
     print("Surnames: ",surnames)
     return render_template('grade.html',zipped = zip(student_ids,names,surnames))
 
-@app.route("/attendencerecord",methods=["GET","POST"])
-def attendencerecord():
-    #siniftan ogrencilerin idsini cek
-    sinif=session['sinif']
-    teacher_id = session['login']
-    studentclass = Student_Class(dsn=app.config['dsn'])
-    attendance = Attendance(dsn=app.config['dsn'])
-    ids = []
-    ids=studentclass.get_id_all_students(sinif)
-    now = datetime.datetime.now()
-    with dbapi2.connect(self.dsn) as connection:
-        cursor = connection.cursor()
-        for id in ids:
-            attendance_situation = request.form[id]
-            query = """INSERT INTO attendence_table(student_id,teacher_id,attendance_date,situation) VALUES (%s,%s,%s,%s)""",(id,teacher_id,now,attendance_situation)
-            cursor.execute(query)
-    return "okay"
 
 @app.route("/graderecord",methods=["GET","POST"])
 def graderecord():
@@ -348,10 +346,10 @@ def listgrades():
 @app.route("/gecici",methods=["GET","POST"])
 def gecici():
     session = Session(dsn=app.config['dsn'])
-    attendence = Attendance(dsn=app.config['dsn'])
+    attendance = Attendance(dsn=app.config['dsn'])
     session.init_table()
-    attendence.init_table()
-    return "attendence yazildi"
+    attendance.init_table()
+    return "attendance yazildi"
 
 if __name__ == '__main__':
     VCAP_APP_PORT = os.getenv('VCAP_APP_PORT')
