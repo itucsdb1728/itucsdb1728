@@ -7,7 +7,24 @@ from flask import render_template
 from flask import Flask
 from flask import request
 from flask import redirect
+from flask import session
 from flask.helpers import url_for
+from classroom import Classroom
+from school import School
+from teacher import Teacher
+from grade import Grade
+from session import Session
+from parent import Parent
+from student import Student
+from lesson import Lesson
+from studentschool import StudentSchool
+from student_classroom import Student_Classroom
+from schoolclassroom import SchoolClassroom
+from studentparent import StudentParent
+from teacheraccount import TeacherAccount
+from teacherschool import TeacherSchool
+from schedule import Schedule
+from teacheraccount import TeacherAccount 
 
 app = Flask(__name__)
 
@@ -26,21 +43,24 @@ class Attendance:
                             teacher_id INTEGER NOT NULL REFERENCES teacher_table(id) ON DELETE CASCADE ON UPDATE CASCADE,
                             attendance_date DATE NOT NULL,
                             situation BOOLEAN NOT NULL
-                            )
-                            """
+                            )"""
                 cursor.execute(query)
 
                 connection.commit()
 
-    def insert_attendance(self, student_id, session_id, situation):          
+
+    def insert_attendance(self,ids,sinif):
+        teacher_id = session['login']
+        now = datetime.datetime.now()
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
-            query = """INSERT INTO attendance_table VALUES
-                        (DEFAULT,(%s),(%s),(%s)) """
-            param = (student_id, session_id, situation)
-            
-            cursor.execute(query,param)
+            for id in ids:
+                attendance_situation = request.form[str(id)]
+                query = """INSERT INTO attendance_table VALUES (DEFAULT,(%s),(%s),(%s),(%s))"""
+                param=(id,teacher_id,now,attendance_situation)
+                cursor.execute(query,param)
             connection.commit()
+        return "yoklama kaydedildi"
 
     def delete_attendance(self, id):
         
@@ -81,14 +101,7 @@ class Attendance:
             return id
 
 
-    def get_attendance_id(self, sinif, session_id):
-        ids = []
-        ids=studentclassroom.get_id_all_students(sinif)
-        now = datetime.datetime.now()
-        with dbapi2.connect(self.dsn) as connection:
-            cursor = connection.cursor()
-            for id in ids:
-                attendance_situation = request.form[id]
-                query = """INSERT INTO attendence_table(student_id,teacher_id,attendance_date,situation) VALUES (%s,%s,%s,%s)""",(id,teacher_id,now,attendance_situation)
-                cursor.execute(query)
+
+
+
     

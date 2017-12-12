@@ -8,11 +8,11 @@
 </head>
 
 <body>
-    <form id="dersSecimi" action="/attendencerecord" method="post">
+    <form id="dersSecimi" action="/attendancerecord" method="post">
 
         {% for name,id in zipped %} {{name}}
-        <input type="radio" checked="checked" name="{{id}}" value="1">
-        <input type="radio" name="{{id}}" value="0"> <br> {%endfor%}
+        <input type="radio" checked="checked" name={{id}} value="true">
+        <input type="radio" name={{id}} value="false"> <br> {%endfor%}
         <input type="submit">
     </form>
 

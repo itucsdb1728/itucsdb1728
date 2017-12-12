@@ -19,7 +19,7 @@ class Classroom:
             with dbapi2.connect(self.dsn) as connection: 
 
                 cursor = connection.cursor()
-                query = """CREATE TABLE IF NOT EXISTS classroom_table (
+                query = """CREATE TABLE IF NOT EXISTS class_table (
                             id SERIAL PRIMARY KEY,
                             name VARCHAR(7) NOT NULL,
                             year INTEGER NOT NULL CHECK (year >= 2012 AND year<=2053)
@@ -32,7 +32,7 @@ class Classroom:
             
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
-            query = """INSERT INTO classroom_table VALUES
+            query = """INSERT INTO class_table VALUES
                         (DEFAULT,(%s),(%s)) """
             param = (classroom_name, year)
             
@@ -43,7 +43,7 @@ class Classroom:
         
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
-            query = """DELETE FROM classroom_table WHERE
+            query = """DELETE FROM class_table WHERE
                         (id = (%s)) """
             param = (id)
             
@@ -54,7 +54,7 @@ class Classroom:
         
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
-            query = """UPDATE classroom_table SET name = (%s), year = (%s)
+            query = """UPDATE class_table SET name = (%s), year = (%s)
                         WHERE id = (%s) """
             param = (new_classroom_name, new_year, id)
             
