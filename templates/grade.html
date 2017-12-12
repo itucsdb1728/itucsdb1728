@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/login.css">
+    <title>Class Choice</title>
+</head>
+
+<body>
+    <form id="graderecord" action="/graderecord" method="post">
+        <input type="text" name="aciklama" placeholder="Sınav Açıklaması"> <br>
+        {% for id,name,surname in zipped %}
+        {{id}}. {{name}} {{surname}} <input type="text" name={{id}}> <br>
+        {%endfor%}
+        <input type="submit">
+    </form>
+
+</body>
+
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='login.css') }}">
+    <title>Class Choice</title>
+</head>
+
+<body>
+    <form id="dersSecimi" action="/attendancelist" method="post">
+        <div class="box-body">
+            <div class=row>
+                <div class="form-group col-md-6">
+                    <label>Sınıf Seçiniz</label>
+                    <select class="form-control select2" name="sinif" style="width: 100%;">
+                  <option selected="selected">Sınıf</option>
+                  {% for name in classes %}
+                    <option value="{{ name }}">{{name}}</option>
+                  {% endfor %}
+                </select>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label>Ders Seçiniz</label>
+                    <select class="form-control select2" name="derssaati" style="width: 100%;">
+                  <option selected="selected">DERS</option>
+                  <option value="1">1.DERS</option>
+                  <option value="2">2.DERS</option>
+                  <option value="3">3.DERS</option>
+                  <option value="4">4.DERS</option>
+                  <option value="5">5.DERS</option>
+                  <option value="6">6.DERS</option>
+                  <option value="7">7.DERS</option>
+                  <option value="8">8.DERS</option>
+                  <option value="9">9.DERS</option>
+                  <option value="10">10.DERS</option>
+                </select>
+                </div>
+                <div class="form-group com-md-6">
+                    <center><button type="submit" class="btn btn-primary btn-lg"><strong>Yoklama Girişi Yap</strong></button></center>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</body>
+
+</html>
