@@ -41,7 +41,6 @@ class Student_Class:
             connection.commit()
 
     def delete_student_class(self, id):
-        
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
             query = """DELETE FROM student_class_table WHERE
@@ -78,8 +77,7 @@ class Student_Class:
 
             return id
 
-    def get_students_class(self, student_id):
-        
+    def get_students_class(self, student_id):    
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
             query = """SELECT class_id FROM student_class_table WHERE
@@ -128,13 +126,12 @@ class Student_Class:
             return dataList
 
 
-    def get_tuple_id_all_students(self, classroom_name):
-        
+    def get_tuple_id_all_students(self, class_name):    
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
             query = """SELECT student_id FROM student_class_table WHERE
                         class_id IN (SELECT id FROM class_table WHERE name =(%s)) """
-            param = (classroom_name,)
+            param = (class_name,)
             
             cursor.execute(query,param)
 

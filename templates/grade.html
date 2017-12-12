@@ -8,12 +8,19 @@
 </head>
 
 <body>
+    <div class="col-lg-4 col-lg-offset-4">
+        <h1>{{sinif}} Sinifi Yoklama Listesi</h1>
+    </div>
     <form id="graderecord" action="/graderecord" method="post">
-        <input type="text" name="aciklama" placeholder="Sınav Açıklaması"> <br>
-        {% for id,name,surname in zipped %}
-        {{id}}. {{name}} {{surname}} <input type="text" name={{id}}> <br>
-        {%endfor%}
-        <input type="submit">
+        <div class="attendancecontainer col-lg-4 col-lg-offset-4">
+            <input class="form-control" type="text" name="aciklama" placeholder="Sınav Açıklaması"> <br> {% for id,name,surname in zipped %}
+            <div class="namesurname col-lg-6">{{name}} {{surname}}</div>
+            <div class="attendanceradios col-lg-offset-6">
+                <input class="form-control-sm" type="text" name={{id}}> <br>
+            </div>{%endfor%}
+            <input class="col-lg-offset-5 btn btn-success" type="submit">
+
+        </div>
     </form>
 
 </body>

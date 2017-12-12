@@ -252,6 +252,12 @@ def selectschedule():
     else:
         return redirect(url_for('home_page'))
 
+@app.route("/gecicigrade",methods=["GET","POST"])
+def gecicigrade():
+    grade = Grade(dsn=app.config['dsn'])
+    grade.init_table()
+    return "yazdik"
+
 @app.route("/attendancelist",methods=["GET","POST"])
 def attendance():
     if session.get('login'):
@@ -264,11 +270,21 @@ def attendance():
         derssaat = request.form['derssaati']
         session['sinif'] = sinif
         session['derssaat'] = derssaat
-        ids = studentclass.get_id_all_students(sinif)
-        names = student.get_all_student_of_class(sinif)
-        return render_template('attendance.html',zipped = zip(names,ids))
+        donenler=classroom.get_class_id_tuple(sinif)
+        class_id = donenler[0]
+        students = studentclass.get_classs_all_students(class_id)
+        student_ids=[]
+        names=[]
+        surnames=[]
+        for a in students:
+            student_ids.append(a[0])
+            my_student = student.get_student(a[0])
+            names.append(my_student[1])
+            surnames.append(my_student[2])
+        return render_template('attendance.html',zipped = zip(student_ids,names,surnames),sinif=sinif)
     else:
         return redirect(url_for('home_page'))
+
 
 @app.route("/attendancerecord",methods=["GET","POST"])
 def attendancerecord():
@@ -278,11 +294,7 @@ def attendancerecord():
         sinif=session['sinif']
         teacher_id = session['login']
         ids = []
-        #ids.append(studentclassroom.get_id_all_students(sinif))
         ids=studentclassroom.get_id_all_students(sinif)
-        #ids=studentclassroom.get_tuple_id_all_students(sinif)
-        #tuple_ids = tuple(ids)
-        #print(ids)
         stringvalue=attendance.insert_attendance(ids,sinif)
         return stringvalue
     else:
@@ -346,8 +358,3 @@ if __name__ == '__main__':
         app.config['dsn'] = """user='root' password='123' host='localhost' port=5432 dbname='db_yoklama'"""
 
     app.run(host='0.0.0.0',port=port,debug=debug)
-
-
-
-
-        
