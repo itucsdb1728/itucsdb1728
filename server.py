@@ -24,7 +24,6 @@ from studentschool import StudentSchool
 from student_class import Student_Class
 from schoolclass import SchoolClass
 from studentparent import StudentParent
-from teacheraccount import TeacherAccount
 from teacherschool import TeacherSchool
 from schedule import Schedule
 from teacheraccount import TeacherAccount 
@@ -267,9 +266,9 @@ def attendance():
         student = Student(dsn=app.config['dsn'])
         #attendance = Attendance(dsn=app.config['dsn']) 
         sinif=request.form['sinif']
-        derssaat = request.form['derssaati']
+        row = request.form['derssaati']
         session['sinif'] = sinif
-        session['derssaat'] = derssaat
+        session['derssaat'] = row
         donenler=classroom.get_class_id_tuple(sinif)
         class_id = donenler[0]
         students = studentclass.get_classs_all_students(class_id)
@@ -285,6 +284,64 @@ def attendance():
     else:
         return redirect(url_for('home_page'))
 
+
+@app.route("/listattendances",methods=["GET","POST"])
+def listattendances():
+    attendance = Attendance(dsn=app.config['dsn'])
+    student = Student(dsn=app.config['dsn'])
+    teacher_id = session['login']
+    attendances = attendance.get_all_attendances_for_teacher(teacher_id)
+    names=[]
+    surnames=[]
+    dates=[]
+    rows=[]
+    situations=[]
+    for a in attendances:
+        my_student = student.get_student(a[1])
+        names.append(my_student[1])
+        surnames.append(my_student[2])
+        dates.append(a[3])
+        rows.append(a[4])
+        situations.append(a[5])
+    return render_template('attendancelist.html',zipped = zip(names,surnames,dates,rows,situations))
+
+@app.route("/updateattendances",methods=["GET","POST"])
+def updateattendances():
+    attendance = Attendance(dsn=app.config['dsn'])
+    student = Student(dsn=app.config['dsn'])
+    teacher_id = session['login']
+    attendances = attendance.get_all_attendances_for_teacher(teacher_id)
+    ids=[]
+    names=[]
+    surnames=[]
+    dates=[]
+    rows=[]
+    situations=[]
+    for a in attendances:
+        ids.append(a[0])
+        my_student = student.get_student(a[1])
+        names.append(my_student[1])
+        surnames.append(my_student[2])
+        dates.append(a[3])
+        rows.append(a[4])
+        situations.append(a[5])
+    
+    return render_template('updateattendances.html',zipped = zip(ids,names,surnames,dates,rows,situations))
+
+@app.route("/updateattendancecontroller",methods=["GET","POST"])
+def updateattendancecontroller():
+    attendance = Attendance(dsn=app.config['dsn'])
+    attendance_id = request.form['attendance']
+    operation = request.form['updateordelete']
+    if str(operation) == 'update':
+        new_situation = request.form['attendancecontrol']
+        my_attendance = attendance.get_attendance(attendance_id)
+        attendance.update_attendance(attendance_id,my_attendance[1],new_situation)
+        return "Guncelleme basarili"
+    else:
+        attendance.delete_attendance(attendance_id)
+        return "Silme basarili"
+    
 
 @app.route("/attendancerecord",methods=["GET","POST"])
 def attendancerecord():
@@ -302,26 +359,88 @@ def attendancerecord():
 
 @app.route("/gradelist",methods=["GET","POST"])
 def gradelist():
-    if session.get('login'):
-        studentclass = Student_Class(dsn=app.config['dsn'])
-        schedule = Schedule(dsn=app.config['dsn'])
-        student = Student(dsn=app.config['dsn']) 
-        schedule_id=request.form['schedule']
-        session['schedule_id'] = schedule_id
-        my_schedule = schedule.get_schedule(schedule_id)
-        class_id = my_schedule[1]
-        students = studentclass.get_classs_all_students(class_id)
-        student_ids=[]
-        names=[]
-        surnames=[]
-        for a in students:
-            student_ids.append(a[0])
-            my_student = student.get_student(a[0])
-            names.append(my_student[1])
-            surnames.append(my_student[2])
-        return render_template('grade.html',zipped = zip(student_ids,names,surnames))
+    studentclass = Student_Class(dsn=app.config['dsn'])
+    schedule = Schedule(dsn=app.config['dsn'])
+    student = Student(dsn=app.config['dsn']) 
+    schedule_id=request.form['schedule']
+    session['schedule_id'] = schedule_id
+    my_schedule = schedule.get_schedule(schedule_id)
+    class_id = my_schedule[1]
+    students = studentclass.get_classs_all_students(class_id)
+    student_ids=[]
+    names=[]
+    surnames=[]
+    for a in students:
+        student_ids.append(a[0])
+        my_student = student.get_student(a[0])
+        names.append(my_student[1])
+        surnames.append(my_student[2])
+        
+    return render_template('grade.html',zipped = zip(student_ids,names,surnames))
+
+
+@app.route("/listgrades",methods=["GET","POST"])
+def listgrades():
+    studentclass = Student_Class(dsn=app.config['dsn'])
+    schedule = Schedule(dsn=app.config['dsn'])
+    student = Student(dsn=app.config['dsn'])
+    grade = Grade(dsn=app.config['dsn'])
+    schedule_id = session['schedule_id']
+    my_schedule = schedule.get_schedule(schedule_id)
+    grades = grade.get_all_grades_for_schedule(schedule_id)
+    names=[]
+    surnames=[]
+    gradepoints=[]
+    explanations=[]
+    for g in grades:
+        my_student = student.get_student(g[2])
+        names.append(my_student[1])
+        surnames.append(my_student[2])
+        gradepoints.append(g[3])
+        explanations.append(g[4])
+
+    return render_template('gradelist.html',zipped = zip(names,surnames,gradepoints,explanations))
+
+@app.route("/updategrades",methods=["GET","POST"])
+def updategrades():
+    studentclass = Student_Class(dsn=app.config['dsn'])
+    schedule = Schedule(dsn=app.config['dsn'])
+    student = Student(dsn=app.config['dsn'])
+    grade = Grade(dsn=app.config['dsn'])
+    schedule_id = session['schedule_id']
+    my_schedule = schedule.get_schedule(schedule_id)
+    grades = grade.get_all_grades_for_schedule(schedule_id)
+    ids=[]
+    names=[]
+    surnames=[]
+    gradepoints=[]
+    explanations=[]
+    for g in grades:
+        ids.append(g[0])
+        my_student = student.get_student(g[2])
+        names.append(my_student[1])
+        surnames.append(my_student[2])
+        gradepoints.append(g[3])
+        explanations.append(g[4])
+
+    return render_template('updategrade.html',zipped = zip(ids,names,surnames,gradepoints,explanations))
+
+@app.route("/updategradecontroller",methods=["GET","POST"])
+def updategradecontroller():
+    grade = Grade(dsn=app.config['dsn'])
+    grade_id = request.form['grade']
+    operation = request.form['updateordelete']
+    if str(operation) == 'update':
+        new_explanation = request.form['new_explanation']
+        new_grade = request.form['new_grade']
+        my_grade = grade.get_grade(grade_id)
+        grade.update_grade(grade_id,my_grade[1],my_grade[2],new_grade,new_explanation)
+        return "Guncelleme basarili"
     else:
-        return redirect(url_for('home_page'))
+        grade.delete_grade(grade_id)
+        return "Silme basarili"
+    
+
 
 @app.route("/graderecord",methods=["GET","POST"])
 def graderecord():

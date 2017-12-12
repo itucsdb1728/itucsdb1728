@@ -11,17 +11,33 @@
     <div class="col-lg-4 col-lg-offset-4">
         <h1>{{sinif}} Sinifi Yoklama Listesi</h1>
     </div>
-    <form id="dersSecimi" action="/attendancerecord" method="post">
-        <div class="attendancecontainer col-lg-4 col-lg-offset-4">
-            {% for id,name,surname in zipped %}
-            <div class="namesurname col-lg-6">{{name}} {{surname}}</div>
-            <div class="attendanceradios col-lg-offset-6">
-                <input type="radio" checked="checked" name={{id}} value="true">
-                <input type="radio" name={{id}} value="false"></div> <br> {%endfor%}
-            <input class="col-lg-offset-5 btn btn-success" type="submit">
-        </div>
-    </form>
 
+    <div class="col-lg-12">
+        <form id="dersSecimi" action="/attendancerecord" method="post">
+            <div class="attendancecontainer col-lg-4 col-lg-offset-4">
+                {% for id,name,surname in zipped %}
+                <div class="namesurname col-lg-6">{{name}} {{surname}}</div>
+                <div class="attendanceradios col-lg-offset-6">
+                    <input type="radio" checked="checked" name={{id}} value="true">
+                    <input type="radio" name={{id}} value="false"></div> <br> {%endfor%}
+                <input class="col-lg-offset-5 btn btn-success" type="submit">
+            </div>
+        </form>
+    </div>
+
+    <div class="col-lg-12 col-lg-offset-4" style="margin-top:15px; margin-bottom:10px;">
+        <form id="listattendances" action="/listattendances" method="post">
+            List all attendances you taken.
+            <input class="btn btn-info" type="submit" value="List">
+        </form>
+    </div>
+
+    <div class="col-lg-12 col-lg-offset-4" style="margin-top:10px; margin-bottom:10px;">
+        <form id="updateattendances" action="/updateattendances" method="post">
+            Update attendances.
+            <input class="btn btn-primary" type="submit" value="Update">
+        </form>
+    </div>
 </body>
 
 </html>

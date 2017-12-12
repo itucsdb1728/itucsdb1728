@@ -101,9 +101,6 @@ class TeacherAccount:
 
             return teacher_account
 
-    
-    
-    
 
     def login_check(self,username,password):
         with dbapi2.connect(self.dsn)  as connection:

@@ -93,19 +93,5 @@ class Lesson:
 
             return lesson
         
-        
-        with dbapi2.connect(self.dsn) as connection:
-            cursor = connection.cursor()
-            query = """SELECT id FROM lesson_table WHERE
-                        (name = (%s)) """
-            param = (lesson_name,)
-            
-            cursor.execute(query,param)
-
-            id = cursor.fetchone()
-            
-            connection.commit()
-
-            return id
 
 

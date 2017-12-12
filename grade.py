@@ -24,7 +24,7 @@ class Grade:
                             schedule_id INTEGER NOT NULL REFERENCES schedule_table(id) ON DELETE CASCADE ON UPDATE CASCADE,
                             student_id INTEGER NOT NULL REFERENCES student_table(id) ON DELETE CASCADE ON UPDATE CASCADE,
                             grade INTEGER NOT NULL CHECK(grade >= 0 AND grade <= 100),
-                            explanation varchar(25) NOT NULL
+                            explanation varchar(25) NOT NULL,
                             UNIQUE (schedule_id,explanation)
                             )
                             """
@@ -49,7 +49,7 @@ class Grade:
             cursor = connection.cursor()
             query = """DELETE FROM grade_table WHERE
                         (id = (%s)) """
-            param = (id)
+            param = (id,)
             
             cursor.execute(query,param)
             connection.commit()
@@ -101,31 +101,31 @@ class Grade:
     
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
-            query = """SELECT id FROM schedule_table WHERE
+            query = """SELECT * FROM grade_table WHERE
                         (student_id = (%s)) """
             param = (student_id,)
             
             cursor.execute(query,param)
 
-            schedules = cursor.fetchall()
+            grades = cursor.fetchall()
             
             connection.commit()
 
-            return schedules
+            return grades
 
     def get_all_grades_for_schedule(self, schedule_id):
 
         with dbapi2.connect(self.dsn) as connection:
             cursor = connection.cursor()
-            query = """SELECT id FROM schedule_table WHERE
+            query = """SELECT * FROM grade_table WHERE
                         (schedule_id = (%s)) """
             param = (schedule_id,)
             
             cursor.execute(query,param)
 
-            schedules = cursor.fetchall()
+            grades = cursor.fetchall()
             
             connection.commit()
 
-            return schedules
+            return grades
         
